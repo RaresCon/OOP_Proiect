@@ -1,6 +1,6 @@
-package pages;
+package site.pages;
 
-import Account.Account;
+import site.account.Account;
 
 public interface ActionsOnPage {
     void changePage(Page currentPage);

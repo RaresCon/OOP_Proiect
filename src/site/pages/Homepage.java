@@ -1,6 +1,6 @@
-package pages;
+package site.pages;
 
-import Account.Account;
+import site.account.Account;
 
 public class Homepage extends Page {
 

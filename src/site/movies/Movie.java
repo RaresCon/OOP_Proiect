@@ -1,4 +1,4 @@
-package Movies;
+package site.movies;
 
 import java.util.ArrayList;
 import java.util.List;

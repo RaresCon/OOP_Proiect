@@ -1,9 +1,9 @@
 package site;
 
-import Account.Account;
+import site.account.Account;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import pages.Homepage;
-import pages.Page;
+import site.pages.Homepage;
+import site.pages.Page;
 
 public final class SiteConnection {
     private static SiteConnection instance = null;

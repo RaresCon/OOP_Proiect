@@ -1,6 +1,6 @@
-package Account;
+package site.account;
 
-import Movies.Movie;
+import site.movies.Movie;
 
 import java.util.ArrayList;
 import java.util.List;

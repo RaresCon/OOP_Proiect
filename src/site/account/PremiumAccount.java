@@ -1,4 +1,4 @@
-package Account;
+package site.account;
 
 public class PremiumAccount extends Account {
 

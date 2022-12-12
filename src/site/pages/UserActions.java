@@ -2,6 +2,6 @@ package site.pages;
 
 import site.account.Account;
 
-public interface ActionsOnPage {
+public interface UserActions {
     void actionOnPage(Account user);
 }

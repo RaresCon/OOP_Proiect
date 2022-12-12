@@ -4,25 +4,28 @@ public class PageFactory {
     public Page getPage(PageTypes pageType) {
         switch (pageType) {
             case HOMEPAGE_NOAUTH -> {
-                return new HomePage(PageTypes.HOMEPAGE_NOAUTH);
+                return new HomePageNoAuth(PageTypes.HOMEPAGE_NOAUTH);
             }
             case HOMEPAGE_AUTH -> {
-                return new HomePageAuth();
+                return new HomePageAuth(PageTypes.HOMEPAGE_NOAUTH);
             }
             case REGISTERPAGE -> {
-                return new RegisterPage();
+                return new RegisterPage(PageTypes.REGISTERPAGE);
             }
             case LOGINPAGE -> {
-                return new LoginPage();
+                return new LoginPage(PageTypes.LOGINPAGE);
             }
             case UPGRADESPAGE -> {
-                return new UpgradesPage();
+                return new UpgradesPage(PageTypes.UPGRADESPAGE);
             }
             case MOVIESPAGE -> {
-                return new MoviesPage();
+                return new MoviesPage(PageTypes.MOVIESPAGE);
             }
             case DETAILSPAGE -> {
-                return new DetailsPage();
+                return new DetailsPage(PageTypes.DETAILSPAGE);
+            }
+            case LOGOUTPAGE -> {
+                return new LogoutPage(PageTypes.LOGOUTPAGE);
             }
         }
         return null;

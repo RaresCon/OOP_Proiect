@@ -1,8 +1,8 @@
 package site;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.Input;
 import site.account.Account;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import site.pages.Page;
 import site.pages.PageFactory;
 
@@ -36,6 +36,8 @@ public final class SiteConnection {
     }
 
     public void processInput(final Input input, final ArrayNode output){
+        SiteStructure site = new SiteStructure();
+
 
     }
 }

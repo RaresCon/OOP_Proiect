@@ -7,5 +7,6 @@ public enum PageTypes {
     LOGINPAGE,
     UPGRADESPAGE,
     MOVIESPAGE,
-    DETAILSPAGE
+    DETAILSPAGE,
+    LOGOUTPAGE
 }

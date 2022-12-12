@@ -1,14 +1,24 @@
 package site;
 
+import input.Input;
 import site.account.Account;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import site.pages.Homepage;
 import site.pages.Page;
+import site.pages.PageFactory;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static site.pages.PageTypes.DETAILSPAGE;
+import static site.pages.PageTypes.HOMEPAGE_AUTH;
+import static site.pages.PageTypes.HOMEPAGE_NOAUTH;
+import static site.pages.PageTypes.LOGINPAGE;
+import static site.pages.PageTypes.MOVIESPAGE;
+import static site.pages.PageTypes.REGISTERPAGE;
+import static site.pages.PageTypes.UPGRADESPAGE;
 
 public final class SiteConnection {
     private static SiteConnection instance = null;
-    private Account currentUser = null;
-    private Page currentPage = new Homepage();
 
     private SiteConnection() {
     }
@@ -25,7 +35,7 @@ public final class SiteConnection {
         return instance;
     }
 
-    public ArrayNode processInput(){
-        return null;
+    public void processInput(final Input input, final ArrayNode output){
+
     }
 }

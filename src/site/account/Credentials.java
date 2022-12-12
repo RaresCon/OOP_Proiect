@@ -7,13 +7,15 @@ public class Credentials {
     private String country;
     private int balance;
 
-    public Credentials(String name, String passwordHash, AccountType type,
-                       String country, int balance) {
-        this.name = name;
-        this.passwordHash = passwordHash;
-        this.accountType = type;
-        this.country = country;
-        this.balance = balance;
+    public Credentials() {
+    }
+
+    public Credentials(Credentials creds) {
+        name = creds.name;
+        passwordHash = creds.passwordHash;
+        accountType = creds.accountType;
+        country = creds.country;
+        balance = creds.balance;
     }
 
     public String getName() {

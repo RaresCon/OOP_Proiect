@@ -12,6 +12,9 @@ public class Movie {
     private List<String> bannedCountries = new ArrayList<>();
     private List<Integer> ratings = new ArrayList<>();
 
+    public Movie() {
+    }
+
     public String getName() {
         return name;
     }

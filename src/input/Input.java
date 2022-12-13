@@ -1,6 +1,5 @@
 package input;
 
-import site.account.Account;
 import site.movies.Movie;
 
 import java.util.ArrayList;

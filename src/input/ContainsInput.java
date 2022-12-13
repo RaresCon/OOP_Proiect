@@ -9,7 +9,6 @@ public class ContainsInput {
     public List<String> getActors() {
         return actors;
     }
-
     public List<String> getGenres() {
         return genres;
     }

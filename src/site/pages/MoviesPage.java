@@ -3,6 +3,7 @@ package site.pages;
 import site.movies.Movie;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MoviesPage extends Page {
@@ -19,7 +20,16 @@ public class MoviesPage extends Page {
         accessiblePages.put("logout", PageTypes.LOGOUTPAGE);
     }
 
+    @Override
+    public List<Movie> getCurrentMovies() {
+        return Collections.unmodifiableList(movies);
+    }
+
     public List<Movie> getMovies() {
         return movies;
+    }
+
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
     }
 }

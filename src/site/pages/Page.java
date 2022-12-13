@@ -1,8 +1,10 @@
 package site.pages;
 
+import site.movies.Movie;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 
 public abstract class Page {
     protected PageTypes pageType;
@@ -18,6 +20,14 @@ public abstract class Page {
             return accessiblePages.get(nextPage);
         }
         return null;
+    }
+
+    public List<Movie> getCurrentMovies() {
+        return null;
+    }
+
+    public HashMap<String, Actions> getAvailableActions() {
+        return availableActions;
     }
 
     public abstract void linkToPages();

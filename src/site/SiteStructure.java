@@ -1,6 +1,6 @@
 package site;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
+import input.ActionInput;
 import site.account.Account;
 import site.pages.*;
 
@@ -9,9 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class SiteStructure {
-    private Account currentUser = null;
-    private Page currentPage;
     private final HashMap<PageTypes, Page> pageStructure = new HashMap<>();
+    private final ArrayList<Account> users = new ArrayList<>();
+    private Account currentUser;
+    private Page currentPage;
 
     public SiteStructure() {
         PageFactory factory = new PageFactory();
@@ -24,20 +25,40 @@ public final class SiteStructure {
         pageStructure.put(PageTypes.DETAILSPAGE, factory.getPage(PageTypes.DETAILSPAGE));
         pageStructure.put(PageTypes.LOGOUTPAGE, factory.getPage(PageTypes.LOGOUTPAGE));
 
-        linkPagesNoAuth();
+        linkPagesAuth();
     }
 
-    public void changePage(String nextPage) {
+    public Output changePage(String nextPage) {
+        Output output = new Output();
+        output.initOutput(currentUser, currentPage.getCurrentMovies());
+
         PageTypes nextPageType = currentPage.nextPage(nextPage);
 
         if (nextPageType != null) {
             currentPage = pageStructure.get(nextPageType);
+        } else {
+            output.setError(true);
         }
+
+        return output;
     }
 
-    private void linkPagesNoAuth() {
-        pageStructure.get(PageTypes.HOMEPAGE_NOAUTH).linkToPages();
-        currentPage = pageStructure.get(PageTypes.HOMEPAGE_NOAUTH);
+    public Output executeAction(ActionInput action) {
+        Output output = new Output();
+        output.initOutput(currentUser, currentPage.getCurrentMovies());
+
+        if (!currentPage.getAvailableActions().containsKey(action.getFeature())) {
+            output.setError(true);
+            return output;
+        }
+
+        if (!currentPage.getAvailableActions().get(action.getFeature())
+                                              .executeAction(action, this)) {
+            output.setError(true);
+            return output;
+        }
+
+        return output;
     }
 
     public void linkPagesAuth() {
@@ -48,5 +69,25 @@ public final class SiteStructure {
 
     public HashMap<PageTypes, Page> getPageStructure() {
         return pageStructure;
+    }
+
+    public ArrayList<Account> getUsers() {
+        return users;
+    }
+
+    public Account getCurrentUser() {
+        return currentUser;
+    }
+
+    public Page getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(Page currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public void setCurrentUser(Account currentUser) {
+        this.currentUser = currentUser;
     }
 }

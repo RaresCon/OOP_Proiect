@@ -3,7 +3,7 @@ package site.account;
 public class Credentials {
     private String name;
     private String passwordHash;
-    private AccountType accountType;
+    private String accountType;
     private String country;
     private int balance;
 
@@ -18,6 +18,10 @@ public class Credentials {
         balance = creds.balance;
     }
 
+    public void subBalance(int balanceToSub) {
+        balance -= balanceToSub;
+    }
+
     public String getName() {
         return name;
     }
@@ -26,11 +30,11 @@ public class Credentials {
         this.name = name;
     }
 
-    public AccountType getAccountType() {
+    public String getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(AccountType accountType) {
+    public void setAccountType(String accountType) {
         this.accountType = accountType;
     }
 
@@ -48,5 +52,9 @@ public class Credentials {
 
     public void setBalance(int balance) {
         this.balance = balance;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
     }
 }

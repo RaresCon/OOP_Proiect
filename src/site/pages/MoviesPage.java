@@ -11,6 +11,8 @@ public class MoviesPage extends Page {
 
     public MoviesPage(PageTypes pageType) {
         super(pageType);
+        availableActions.put("search", Actions.SEARCH);
+        availableActions.put("filter", Actions.FILTER);
     }
 
     @Override
@@ -18,6 +20,16 @@ public class MoviesPage extends Page {
         accessiblePages.put("homepage", PageTypes.HOMEPAGE_AUTH);
         accessiblePages.put("see details", PageTypes.DETAILSPAGE);
         accessiblePages.put("logout", PageTypes.LOGOUTPAGE);
+    }
+
+    @Override
+    public Movie containsMovie(String movieToFind) {
+        for (Movie movie : movies) {
+            if (movie.getName().equals(movieToFind)) {
+                return movie;
+            }
+        }
+        return null;
     }
 
     @Override

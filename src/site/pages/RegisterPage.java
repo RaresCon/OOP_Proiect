@@ -3,6 +3,7 @@ package site.pages;
 public class RegisterPage extends Page {
     public RegisterPage(PageTypes pageType) {
         super(pageType);
+        availableActions.put("register", Actions.REGISTER);
     }
 
     @Override

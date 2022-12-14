@@ -1,12 +1,15 @@
 package site.pages;
 
 import input.ActionInput;
+import input.FilterInput;
 import site.SiteStructure;
 import site.account.Account;
 import site.account.PremiumAccount;
 import site.account.StandardAccount;
+import site.movies.Filter;
 import site.movies.Movie;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public enum Actions {
@@ -57,8 +60,26 @@ public enum Actions {
         @Override
         public boolean executeAction(ActionInput action, SiteStructure site) {
             List<Movie> currentMovies = site.getCurrentPage().getCurrentMovies();
+            List<Movie> copyMovies = new ArrayList<>(currentMovies);
             currentMovies.removeIf(movie -> !movie.getName().startsWith(action.getStartsWith()));
 
+            if (currentMovies.isEmpty()) {
+                currentMovies.addAll(copyMovies);
+                return false;
+            }
+
+            return true;
+        }
+    },
+
+    FILTER {
+        @Override
+        public boolean executeAction(ActionInput action, SiteStructure site) {
+            Filter.sortMovies(site.getCurrentPage().getCurrentMovies(),
+                              action.getFilters().getSort());
+
+            Filter.filterMovies(site.getCurrentPage().getCurrentMovies(),
+                                action.getFilters().getContains());
             return true;
         }
     },
@@ -93,12 +114,64 @@ public enum Actions {
     BUY_MOVIE {
         @Override
         public boolean executeAction(ActionInput action, SiteStructure site) {
-            if (2 <= site.getCurrentUser().getTokensCount()
-                || site.getCurrentUser().getNumFreePremiumMovies() > 0) {
+            if (2 <= site.getCurrentUser().getTokensCount()) {
                 site.getCurrentUser().subTokens(2);
-                //site.getCurrentPage().g
+                site.getCurrentUser().getPurchasedMovies()
+                                     .addAll(site.getCurrentPage().getCurrentMovies());
+
+                return true;
+            } else if (site.getCurrentUser().getNumFreePremiumMovies() > 0) {
+                site.getCurrentUser().getPurchasedMovies()
+                                     .addAll(site.getCurrentPage().getCurrentMovies());
+
+                return true;
             }
 
+            return false;
+        }
+    },
+
+    WATCH_MOVIE {
+        @Override
+        public boolean executeAction(ActionInput action, SiteStructure site) {
+            site.getCurrentUser().getWatchedMovies()
+                                 .addAll(site.getCurrentPage().getCurrentMovies());
+
+            return true;
+        }
+    },
+
+    LIKE_MOVIE {
+        @Override
+        public boolean executeAction(ActionInput action, SiteStructure site) {
+            Account currentUser = site.getCurrentUser();
+            for (Movie movie : site.getCurrentPage().getCurrentMovies()) {
+                if (currentUser.getWatchedMovies().contains(movie)) {
+                    currentUser.getLikedMovies().add(movie);
+                    movie.incNumLikes();
+                    return true;
+                }
+            }
+            return false;
+        }
+    },
+
+    RATE_MOVIE {
+        @Override
+        public boolean executeAction(ActionInput action, SiteStructure site) {
+            Account currentUser = site.getCurrentUser();
+            if (action.getRate() > 5) {
+                return false;
+            }
+
+            for (Movie movie : site.getCurrentPage().getCurrentMovies()) {
+                if (currentUser.getWatchedMovies().contains(movie)) {
+                    currentUser.getRatedMovies().add(movie);
+                    movie.getRatings().add((double) action.getRate());
+
+                    return true;
+                }
+            }
             return false;
         }
     };

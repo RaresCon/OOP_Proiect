@@ -1,7 +1,12 @@
 package site;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionInput;
+import jdk.jshell.execution.Util;
 import site.account.Account;
+import site.movies.Movie;
 import site.pages.*;
 
 import java.util.ArrayList;
@@ -28,33 +33,56 @@ public final class SiteStructure {
         linkPagesAuth();
     }
 
-    public Output changePage(String nextPage) {
-        Output output = new Output();
-        output.initOutput(currentUser, currentPage.getCurrentMovies());
+    public ObjectNode changePage(ActionInput nextPage) {
+        ObjectNode output = JsonNodeFactory.instance.objectNode();
+        output.put("error", "null");
 
         PageTypes nextPageType = currentPage.nextPage(nextPage);
 
-        if (nextPageType != null) {
+        if (nextPageType == PageTypes.DETAILSPAGE) {
+            Movie foundMovie = currentPage.containsMovie(nextPage.getMovie());
+
+            if (foundMovie != null) {
+                currentPage = pageStructure.get(nextPageType);
+                ((DetailsPage) currentPage).setMovieToDetail(foundMovie);
+            } else {
+                output.put("error", "Error");
+            }
+        } else if (nextPageType != null) {
             currentPage = pageStructure.get(nextPageType);
         } else {
-            output.setError(true);
+            output.put("error", "Error");
+        }
+
+        output.replace("currentMovies", Utility.movieListOutput(currentPage.getCurrentMovies()));
+        if (currentUser == null) {
+            output.put("currentUser", "null");
+        } else {
+            output.replace("currentUser", Utility.userOutput(currentUser));
         }
 
         return output;
     }
 
-    public Output executeAction(ActionInput action) {
-        Output output = new Output();
-        output.initOutput(currentUser, currentPage.getCurrentMovies());
+    public ObjectNode executeAction(ActionInput action) {
+        ObjectNode output = JsonNodeFactory.instance.objectNode();
+        output.put("error", "null");
+
+        output.replace("currentMovies", Utility.movieListOutput(currentPage.getCurrentMovies()));
+        if (currentUser == null) {
+            output.put("currentUser", "null");
+        } else {
+            output.replace("currentUser", Utility.userOutput(currentUser));
+        }
 
         if (!currentPage.getAvailableActions().containsKey(action.getFeature())) {
-            output.setError(true);
+            output.put("error", "Error");
             return output;
         }
 
         if (!currentPage.getAvailableActions().get(action.getFeature())
                                               .executeAction(action, this)) {
-            output.setError(true);
+            output.put("error", "Error");
             return output;
         }
 

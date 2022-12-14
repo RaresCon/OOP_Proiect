@@ -1,5 +1,6 @@
 package site.pages;
 
+import input.ActionInput;
 import site.movies.Movie;
 
 import java.util.ArrayList;
@@ -15,10 +16,14 @@ public abstract class Page {
         this.pageType = pageType;
     }
 
-    public PageTypes nextPage(String nextPage) {
-        if (accessiblePages.containsKey(nextPage)) {
-            return accessiblePages.get(nextPage);
+    public PageTypes nextPage(ActionInput action) {
+        if (accessiblePages.containsKey(action.getPage())) {
+            return accessiblePages.get(action.getPage());
         }
+        return null;
+    }
+
+    public Movie containsMovie(String movie) {
         return null;
     }
 

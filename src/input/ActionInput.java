@@ -6,6 +6,7 @@ public class ActionInput {
     private String type;
     private String page;
     private String feature;
+    private FilterInput filters;
     private Credentials credentials;
     private String startsWith;
     private int count;
@@ -47,5 +48,9 @@ public class ActionInput {
 
     public int getRate() {
         return rate;
+    }
+
+    public FilterInput getFilters() {
+        return filters;
     }
 }

@@ -3,6 +3,8 @@ package site.pages;
 public class UpgradesPage extends Page {
     public UpgradesPage(PageTypes pageType) {
         super(pageType);
+        availableActions.put("buy premium account", Actions.BUY_PREMIUM);
+        availableActions.put("buy tokens", Actions.BUY_TOKENS);
     }
 
     @Override

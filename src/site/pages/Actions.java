@@ -1,9 +1,9 @@
 package site.pages;
 
 import input.ActionInput;
-import input.FilterInput;
 import site.SiteStructure;
 import site.account.Account;
+import site.account.AccountFactory;
 import site.account.PremiumAccount;
 import site.account.StandardAccount;
 import site.movies.Filter;
@@ -24,6 +24,7 @@ public enum Actions {
                 }
             }
             site.setCurrentPage(site.getPageStructure().get(PageTypes.HOMEPAGE_NOAUTH));
+
             return false;
         }
     },
@@ -43,13 +44,12 @@ public enum Actions {
                 }
             }
 
-            Account newUser;
-            if (action.getCredentials().getAccountType().equals("standard")) {
-                newUser = new StandardAccount(action.getCredentials());
-            } else {
-                newUser = new PremiumAccount(action.getCredentials());
-            }
+            AccountFactory factory = new AccountFactory();
+            Account newUser = factory.getAccount(action.getCredentials().getAccountType(),
+                                                 action.getCredentials());
+
             site.getUsers().add(newUser);
+            site.setCurrentUser(newUser);
 
             site.setCurrentPage(site.getPageStructure().get(PageTypes.HOMEPAGE_AUTH));
             return true;
@@ -59,14 +59,8 @@ public enum Actions {
     SEARCH {
         @Override
         public boolean executeAction(ActionInput action, SiteStructure site) {
-            List<Movie> currentMovies = site.getCurrentPage().getCurrentMovies();
-            List<Movie> copyMovies = new ArrayList<>(currentMovies);
+            List<Movie> currentMovies = site.getCurrentMoviesList();
             currentMovies.removeIf(movie -> !movie.getName().startsWith(action.getStartsWith()));
-
-            if (currentMovies.isEmpty()) {
-                currentMovies.addAll(copyMovies);
-                return false;
-            }
 
             return true;
         }
@@ -75,11 +69,21 @@ public enum Actions {
     FILTER {
         @Override
         public boolean executeAction(ActionInput action, SiteStructure site) {
-            Filter.sortMovies(site.getCurrentPage().getCurrentMovies(),
-                              action.getFilters().getSort());
+            site.getCurrentMoviesList().clear();
 
-            Filter.filterMovies(site.getCurrentPage().getCurrentMovies(),
-                                action.getFilters().getContains());
+            for (Movie movie : site.getMoviesDataBase()) {
+                if (!movie.getCountriesBanned().contains(site.getCurrentUser().getCreds().getCountry())) {
+                    site.getCurrentMoviesList().add(movie);
+                }
+            }
+
+            if (action.getFilters().getSort() != null)
+                Filter.sortMovies(site.getCurrentMoviesList(),
+                                  action.getFilters().getSort());
+
+            if (action.getFilters().getContains() != null)
+                Filter.filterMovies(site.getCurrentMoviesList(),
+                                    action.getFilters().getContains());
             return true;
         }
     },
@@ -117,12 +121,12 @@ public enum Actions {
             if (2 <= site.getCurrentUser().getTokensCount()) {
                 site.getCurrentUser().subTokens(2);
                 site.getCurrentUser().getPurchasedMovies()
-                                     .addAll(site.getCurrentPage().getCurrentMovies());
+                                     .addAll(site.getCurrentMoviesList());
 
                 return true;
             } else if (site.getCurrentUser().getNumFreePremiumMovies() > 0) {
                 site.getCurrentUser().getPurchasedMovies()
-                                     .addAll(site.getCurrentPage().getCurrentMovies());
+                                     .addAll(site.getCurrentMoviesList());
 
                 return true;
             }
@@ -134,10 +138,13 @@ public enum Actions {
     WATCH_MOVIE {
         @Override
         public boolean executeAction(ActionInput action, SiteStructure site) {
-            site.getCurrentUser().getWatchedMovies()
-                                 .addAll(site.getCurrentPage().getCurrentMovies());
+            if (site.getCurrentUser().getPurchasedMovies().containsAll(site.getCurrentMoviesList())) {
+                site.getCurrentUser().getWatchedMovies()
+                        .addAll(site.getCurrentMoviesList());
+                return true;
+            }
 
-            return true;
+            return false;
         }
     },
 
@@ -145,7 +152,7 @@ public enum Actions {
         @Override
         public boolean executeAction(ActionInput action, SiteStructure site) {
             Account currentUser = site.getCurrentUser();
-            for (Movie movie : site.getCurrentPage().getCurrentMovies()) {
+            for (Movie movie : site.getCurrentMoviesList()) {
                 if (currentUser.getWatchedMovies().contains(movie)) {
                     currentUser.getLikedMovies().add(movie);
                     movie.incNumLikes();
@@ -160,11 +167,11 @@ public enum Actions {
         @Override
         public boolean executeAction(ActionInput action, SiteStructure site) {
             Account currentUser = site.getCurrentUser();
-            if (action.getRate() > 5) {
+            if (action.getRate() > 5 || action.getRate() < 0) {
                 return false;
             }
 
-            for (Movie movie : site.getCurrentPage().getCurrentMovies()) {
+            for (Movie movie : site.getCurrentMoviesList()) {
                 if (currentUser.getWatchedMovies().contains(movie)) {
                     currentUser.getRatedMovies().add(movie);
                     movie.getRatings().add((double) action.getRate());

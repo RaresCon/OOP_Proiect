@@ -4,6 +4,6 @@ public class StandardAccount extends Account {
 
     public StandardAccount(Credentials creds) {
         super(creds);
-        numFreePremiumMovies = 0;
+        numFreePremiumMovies = 15;
     }
 }

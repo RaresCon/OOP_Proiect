@@ -23,14 +23,6 @@ public abstract class Page {
         return null;
     }
 
-    public Movie containsMovie(String movie) {
-        return null;
-    }
-
-    public List<Movie> getCurrentMovies() {
-        return new ArrayList<>();
-    }
-
     public HashMap<String, Actions> getAvailableActions() {
         return availableActions;
     }

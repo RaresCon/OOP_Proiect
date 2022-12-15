@@ -2,7 +2,7 @@ package site.account;
 
 public class Credentials {
     private String name;
-    private String passwordHash;
+    private String password;
     private String accountType;
     private String country;
     private int balance;
@@ -12,7 +12,7 @@ public class Credentials {
 
     public Credentials(Credentials creds) {
         name = creds.name;
-        passwordHash = creds.passwordHash;
+        password = creds.password;
         accountType = creds.accountType;
         country = creds.country;
         balance = creds.balance;
@@ -54,7 +54,7 @@ public class Credentials {
         this.balance = balance;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 }

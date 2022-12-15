@@ -26,7 +26,7 @@ public class Utility {
 
         movie.getGenres().forEach(genresOutput::add);
         movie.getActors().forEach(actorsOutput::add);
-        movie.getBannedCountries().forEach(countriesBanned::add);
+        movie.getCountriesBanned().forEach(countriesBanned::add);
 
         movieOutput.put("name", movie.getName());
         movieOutput.put("year", movie.getYear());
@@ -60,7 +60,7 @@ public class Utility {
         ObjectNode credsOutput = JsonNodeFactory.instance.objectNode();
 
         credsOutput.put("name", creds.getName());
-        credsOutput.put("password", creds.getPasswordHash());
+        credsOutput.put("password", creds.getPassword());
         credsOutput.put("accoutType", creds.getAccountType());
         credsOutput.put("country", creds.getCountry());
         credsOutput.put("balance", creds.getBalance());

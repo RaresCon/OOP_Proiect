@@ -1,6 +1,6 @@
 package site.pages;
 
-public class PageFactory {
+public final class PageFactory {
     public Page getPage(PageTypes pageType) {
         switch (pageType) {
             case HOMEPAGE_NOAUTH -> {

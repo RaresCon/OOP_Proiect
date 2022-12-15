@@ -31,6 +31,7 @@ public final class SiteStructure {
         pageStructure.put(PageTypes.LOGOUTPAGE, factory.getPage(PageTypes.LOGOUTPAGE));
 
         linkPagesAuth();
+        currentPage = pageStructure.get(PageTypes.HOMEPAGE_NOAUTH);
     }
 
     public ObjectNode changePage(ActionInput nextPage) {

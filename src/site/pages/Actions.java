@@ -32,7 +32,7 @@ public enum Actions {
         @Override
         public boolean executeAction(ActionInput action, SiteStructure site) {
             if (action.getCredentials().getName().isEmpty()
-                || action.getCredentials().getPasswordHash().isEmpty()
+                || action.getCredentials().getPassword().isEmpty()
                 || action.getCredentials().getCountry().isEmpty())
                 return false;
 

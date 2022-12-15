@@ -27,7 +27,10 @@ public class DetailsPage extends Page {
     }
 
     public List<Movie> getCurrentMovies() {
-        return Collections.singletonList(movieToDetail);
+        List<Movie> currentMovies = new ArrayList<>();
+        currentMovies.add(movieToDetail);
+
+        return currentMovies;
     }
 
     public Movie getMovieToDetail() {

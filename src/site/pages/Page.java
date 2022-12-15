@@ -28,7 +28,7 @@ public abstract class Page {
     }
 
     public List<Movie> getCurrentMovies() {
-        return null;
+        return new ArrayList<>();
     }
 
     public HashMap<String, Actions> getAvailableActions() {

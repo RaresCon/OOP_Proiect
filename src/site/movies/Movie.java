@@ -1,18 +1,16 @@
 package site.movies;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Movie {
     private String name;
     private int year;
     private int duration;
     private int numLikes = 0;
-    private Set<String> genres = new HashSet<>();
-    private Set<String> actors = new HashSet<>();
-    private Set<String> bannedCountries = new HashSet<>();
+    private List<String> genres = new ArrayList<>();
+    private List<String> actors = new ArrayList<>();
+    private List<String> countriesBanned = new ArrayList<>();
     private List<Double> ratings = new ArrayList<>();
 
     public Movie() {
@@ -43,24 +41,20 @@ public class Movie {
         return numLikes;
     }
 
-    public Set<String> getGenres() {
+    public List<String> getGenres() {
         return genres;
     }
 
-    public Set<String> getActors() {
+    public List<String> getActors() {
         return actors;
     }
 
-    public Set<String> getBannedCountries() {
-        return bannedCountries;
+    public List<String> getCountriesBanned() {
+        return countriesBanned;
     }
 
     public List<Double> getRatings() {
         return ratings;
-    }
-
-    public void setRatings(List<Double> ratings) {
-        this.ratings = ratings;
     }
 
     public void incNumLikes() {

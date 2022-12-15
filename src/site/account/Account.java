@@ -1,5 +1,6 @@
 package site.account;
 
+import input.UserInput;
 import site.movies.Movie;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public abstract class Account {
 
     public boolean checkCreds(Credentials creds) {
         return this.creds.getName().equals(creds.getName())
-               && this.creds.getPasswordHash().equals(creds.getPasswordHash());
+               && this.creds.getPassword().equals(creds.getPassword());
     }
 
     public void addTokens(int toAddTokens) {

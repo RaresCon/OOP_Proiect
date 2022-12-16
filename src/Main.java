@@ -18,10 +18,7 @@ public class Main {
 
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(args[1]), output);
-        System.out.println(args[1].contains("2"));
-        if (args[0].contains("6"))
+        if (args[0].contains("11"))
             System.exit(0);
-
-        System.out.println(args[0]);
     }
 }

@@ -10,5 +10,4 @@ public class HomePageNoAuth extends Page {
         accessiblePages.put("login", PageTypes.LOGINPAGE);
         accessiblePages.put("register", PageTypes.REGISTERPAGE);
     }
-
 }

@@ -1,5 +1,8 @@
 package site.pages;
 
+import input.ActionInput;
+import site.SiteStructure;
+
 public class HomePageAuth extends Page {
     public HomePageAuth(PageTypes pageType) {
         super(pageType);

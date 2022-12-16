@@ -36,51 +36,11 @@ public final class SiteStructure {
     }
 
     public ObjectNode changePage(ActionInput nextPage) {
-        ObjectNode output = JsonNodeFactory.instance.objectNode();
-        output.put("error", (String)null);
-        output.replace("currentMoviesList", Utility.movieListOutput(currentMoviesList));
-        if (currentUser == null) {
-            output.put("currentUser", (String)null);
-        } else {
-            output.replace("currentUser", Utility.userOutput(currentUser));
-        }
-
-        PageTypes nextPageType = currentPage.nextPage(nextPage);
-
-        if (nextPageType == PageTypes.DETAILSPAGE) {
-            Movie foundMovie = listContainsMovie(currentMoviesList, nextPage.getMovie());
-
-            if (foundMovie != null) {
-                currentPage = pageStructure.get(nextPageType);
-                currentMoviesList.clear();
-                currentMoviesList.add(foundMovie);
-
-                output.replace("currentMoviesList", Utility.movieListOutput(currentMoviesList));
-            } else {
-                return Utility.getError();
-            }
-        } else if (nextPageType == PageTypes.MOVIESPAGE) {
-            currentMoviesList.clear();
-            currentPage = pageStructure.get(nextPageType);
-            for (Movie movie : moviesDataBase) {
-                if (!movie.getCountriesBanned().contains(currentUser.getCreds().getCountry())) {
-                    currentMoviesList.add(movie);
-                }
-            }
-
-            output.replace("currentMoviesList", Utility.movieListOutput(currentMoviesList));
-            return output;
-        } else if (nextPageType == PageTypes.LOGOUTPAGE) {
-            currentPage = pageStructure.get(PageTypes.HOMEPAGE_NOAUTH);
-            currentUser = null;
-            currentMoviesList.clear();
-        } else if (nextPageType != null) {
-            currentPage = pageStructure.get(nextPageType);
+        if (currentPage.setNextPage(nextPage, this)) {
+            return currentPage.setState(nextPage, this);
         } else {
             return Utility.getError();
         }
-
-        return null;
     }
 
     public ObjectNode executeAction(ActionInput action) {
@@ -102,6 +62,10 @@ public final class SiteStructure {
         } else {
             output.replace("currentUser", Utility.userOutput(currentUser));
         }
+
+        if (action.getFeature().equals("buy tokens")
+            || action.getFeature().equals("buy premium account"))
+            return null;
 
         return output;
     }
@@ -130,12 +94,12 @@ public final class SiteStructure {
         return users;
     }
 
-    public Account getCurrentUser() {
-        return currentUser;
-    }
-
     public Page getCurrentPage() {
         return currentPage;
+    }
+
+    public Account getCurrentUser() {
+        return currentUser;
     }
 
     public void setCurrentPage(Page currentPage) {

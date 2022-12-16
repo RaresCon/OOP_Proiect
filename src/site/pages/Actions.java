@@ -69,13 +69,7 @@ public enum Actions {
     FILTER {
         @Override
         public boolean executeAction(ActionInput action, SiteStructure site) {
-            site.getCurrentMoviesList().clear();
-
-            for (Movie movie : site.getMoviesDataBase()) {
-                if (!movie.getCountriesBanned().contains(site.getCurrentUser().getCreds().getCountry())) {
-                    site.getCurrentMoviesList().add(movie);
-                }
-            }
+            site.getCurrentPage().setState(null, site);
 
             if (action.getFilters().getSort() != null)
                 Filter.sortMovies(site.getCurrentMoviesList(),
@@ -107,6 +101,7 @@ public enum Actions {
         public boolean executeAction(ActionInput action, SiteStructure site) {
             if (10 <= site.getCurrentUser().getTokensCount()) {
                 site.getCurrentUser().subTokens(10);
+                site.getCurrentUser().getCreds().setAccountType("premium");
 
                 return true;
             }
@@ -118,15 +113,17 @@ public enum Actions {
     BUY_MOVIE {
         @Override
         public boolean executeAction(ActionInput action, SiteStructure site) {
-            if (2 <= site.getCurrentUser().getTokensCount()) {
-                site.getCurrentUser().subTokens(2);
+            if (site.getCurrentUser().getNumFreePremiumMovies() > 0
+                && site.getCurrentUser().getCreds().getAccountType().equals("premium")) {
+                site.getCurrentUser().subNumFreePremiumMovies();
                 site.getCurrentUser().getPurchasedMovies()
                                      .addAll(site.getCurrentMoviesList());
 
                 return true;
-            } else if (site.getCurrentUser().getNumFreePremiumMovies() > 0) {
+            } else if (2 <= site.getCurrentUser().getTokensCount()) {
                 site.getCurrentUser().getPurchasedMovies()
                                      .addAll(site.getCurrentMoviesList());
+                site.getCurrentUser().subTokens(2);
 
                 return true;
             }
@@ -138,7 +135,8 @@ public enum Actions {
     WATCH_MOVIE {
         @Override
         public boolean executeAction(ActionInput action, SiteStructure site) {
-            if (site.getCurrentUser().getPurchasedMovies().containsAll(site.getCurrentMoviesList())) {
+            if (site.getCurrentUser().getPurchasedMovies()
+                                     .containsAll(site.getCurrentMoviesList())) {
                 site.getCurrentUser().getWatchedMovies()
                         .addAll(site.getCurrentMoviesList());
                 return true;
@@ -167,6 +165,7 @@ public enum Actions {
         @Override
         public boolean executeAction(ActionInput action, SiteStructure site) {
             Account currentUser = site.getCurrentUser();
+
             if (action.getRate() > 5 || action.getRate() < 0) {
                 return false;
             }

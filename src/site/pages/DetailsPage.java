@@ -1,5 +1,10 @@
 package site.pages;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import input.ActionInput;
+import site.SiteStructure;
+import site.Utility;
 import site.movies.Movie;
 
 import java.util.ArrayList;
@@ -23,5 +28,19 @@ public class DetailsPage extends Page {
         accessiblePages.put("movies", PageTypes.MOVIESPAGE);
         accessiblePages.put("upgrades", PageTypes.UPGRADESPAGE);
         accessiblePages.put("logout", PageTypes.LOGOUTPAGE);
+    }
+
+    public ObjectNode setState(ActionInput action, SiteStructure site) {
+        Movie foundMovie = site.listContainsMovie(site.getCurrentMoviesList(), action.getMovie());
+
+        site.getCurrentMoviesList().clear();
+        site.getCurrentMoviesList().add(foundMovie);
+
+        ObjectNode output = JsonNodeFactory.instance.objectNode();
+        output.put("error", (String)null);
+        output.replace("currentMoviesList", Utility.movieListOutput(site.getCurrentMoviesList()));
+        output.replace("currentUser", Utility.userOutput(site.getCurrentUser()));
+
+        return output;
     }
 }

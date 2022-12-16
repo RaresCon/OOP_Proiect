@@ -50,8 +50,6 @@ public final class SiteConnection {
         site.getMoviesDataBase().addAll(input.getMovies());
 
         AccountFactory factory = new AccountFactory();
-        System.out.println(input.getUsers().get(0).getCredentials().getAccountType());
-        System.out.println(input.getUsers().get(1).getCredentials().getAccountType());
         input.getUsers().forEach((user -> site.getUsers()
                                               .add(factory.getAccount(user.getCredentials()
                                                                           .getAccountType(),

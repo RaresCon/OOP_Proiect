@@ -67,4 +67,8 @@ public abstract class Account {
     public void setNumFreePremiumMovies(int numFreePremiumMovies) {
         this.numFreePremiumMovies = numFreePremiumMovies;
     }
+
+    public void subNumFreePremiumMovies() {
+        numFreePremiumMovies -= 1;
+    }
 }

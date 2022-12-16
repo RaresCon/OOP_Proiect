@@ -1,5 +1,8 @@
 package site.pages;
 
+import input.ActionInput;
+import site.SiteStructure;
+
 public class LoginPage extends Page {
     public LoginPage(PageTypes pageType) {
         super(pageType);

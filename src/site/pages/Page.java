@@ -1,6 +1,8 @@
 package site.pages;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionInput;
+import site.SiteStructure;
 import site.movies.Movie;
 
 import java.util.ArrayList;
@@ -16,16 +18,23 @@ public abstract class Page {
         this.pageType = pageType;
     }
 
-    public PageTypes nextPage(ActionInput action) {
+    public abstract void linkToPages();
+
+    public boolean setNextPage(ActionInput action, SiteStructure site) {
         if (accessiblePages.containsKey(action.getPage())) {
-            return accessiblePages.get(action.getPage());
+            site.setCurrentPage(site.getPageStructure().get(accessiblePages.get(action.getPage())));
+            return true;
         }
+
+        return false;
+    }
+
+    public ObjectNode setState(ActionInput input, SiteStructure site) {
+        site.getCurrentMoviesList().clear();
         return null;
     }
 
     public HashMap<String, Actions> getAvailableActions() {
         return availableActions;
     }
-
-    public abstract void linkToPages();
 }

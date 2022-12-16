@@ -1,10 +1,7 @@
 package input;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.List;
 
-@JsonIgnoreProperties({"genre"})
 public class ContainsInput {
     private List<String> actors;
     private List<String> genre;
@@ -12,7 +9,7 @@ public class ContainsInput {
     public List<String> getActors() {
         return actors;
     }
-    public List<String> getGenres() {
+    public List<String> getGenre() {
         return genre;
     }
 }

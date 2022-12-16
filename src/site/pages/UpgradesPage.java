@@ -1,5 +1,8 @@
 package site.pages;
 
+import input.ActionInput;
+import site.SiteStructure;
+
 public class UpgradesPage extends Page {
     public UpgradesPage(PageTypes pageType) {
         super(pageType);
@@ -9,7 +12,7 @@ public class UpgradesPage extends Page {
 
     @Override
     public void linkToPages() {
-        accessiblePages.put("homepage auth", PageTypes.HOMEPAGE_AUTH);
+        accessiblePages.put("homepage", PageTypes.HOMEPAGE_AUTH);
         accessiblePages.put("movies", PageTypes.MOVIESPAGE);
         accessiblePages.put("logout", PageTypes.LOGOUTPAGE);
     }

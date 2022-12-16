@@ -1,5 +1,7 @@
 package site.pages;
 
+import site.SiteStructure;
+
 public class RegisterPage extends Page {
     public RegisterPage(PageTypes pageType) {
         super(pageType);

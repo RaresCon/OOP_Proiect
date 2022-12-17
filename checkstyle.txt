@@ -3,6 +3,11 @@ Starting audit...
 [ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\Main.java:14:5: Missing a Javadoc comment. [MissingJavadocMethod]
 [ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\site\Database.java:9:18: Using the '.*' form of import should be avoided - site.pages.*. [AvoidStarImport]
 [ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\site\pages\Actions.java:15:33: Using the '.*' form of import should be avoided - site.ResponseCodes.*. [AvoidStarImport]
+[ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\site\pages\Actions.java:191:41: Parameter action should be final. [FinalParameters]
+[ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\site\pages\Actions.java:191:61: Parameter site should be final. [FinalParameters]
+[ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\site\pages\PageFactory.java:3:8: Unused import - site.SiteConnection. [UnusedImports]
+[ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\site\pages\PageFactory.java:6:31: Variable 'instance' must be private and have accessor methods. [VisibilityModifier]
+[ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\site\pages\PageFactory.java:11:26: '{' is not preceded with whitespace. [WhitespaceAround]
 [ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\Test.java:9:28: Using the '.*' form of import should be avoided - java.util.concurrent.*. [AvoidStarImport]
 Audit done.
-Checkstyle ends with 5 errors.
+Checkstyle ends with 10 errors.

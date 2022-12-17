@@ -111,22 +111,29 @@ public enum Actions {
                 return null;
             }
 
-            return Utility.response(site, OK);
+            return Utility.response(site, ERROR);
         }
     },
 
-    BUY_MOVIE {
+    PURCHASE_MOVIE {
         @Override
         public ObjectNode executeAction(final ActionInput action, final Database site) {
-            if (site.getCurrentUser().getNumFreePremiumMovies() > 0
-                && site.getCurrentUser().getCreds().getAccountType().equals("premium")) {
+            Account currentUser = site.getCurrentUser();
+            List<Movie> userPurchasedMovies = currentUser.getPurchasedMovies();
+
+            if (site.getMovieFromList(userPurchasedMovies, site.getCurrentMovie()) != null) {
+                return Utility.response(site, ERROR);
+            }
+
+            if (currentUser.getNumFreePremiumMovies() > 0
+                && currentUser.getCreds().getAccountType().equals("premium")) {
                 site.getCurrentUser().subNumFreePremiumMovies();
                 site.getCurrentUser().getPurchasedMovies()
                                      .addAll(site.getCurrentMoviesList());
 
                 return Utility.response(site, OK);
-            } else if (Config.MOVIE_PRICE <= site.getCurrentUser().getTokensCount()) {
-                site.getCurrentUser().getPurchasedMovies()
+            } else if (Config.MOVIE_PRICE <= currentUser.getTokensCount()) {
+                currentUser.getPurchasedMovies()
                                      .addAll(site.getCurrentMoviesList());
                 site.getCurrentUser().subTokens(Config.MOVIE_PRICE);
 
@@ -175,6 +182,24 @@ public enum Actions {
                     return Utility.response(site, OK);
                 }
             }
+            return Utility.response(site, ERROR);
+        }
+    },
+
+    UNLIKE_MOVIE {
+        @Override
+        public ObjectNode executeAction(ActionInput action, Database site) {
+            Account currentUser = site.getCurrentUser();
+            List<Movie> userLikedMovies = currentUser.getLikedMovies();
+            Movie likedMovie = site.getMovieFromList(userLikedMovies, site.getCurrentMovie());
+
+            if (likedMovie != null) {
+                likedMovie.subNumLikes();
+                userLikedMovies.remove(likedMovie);
+
+                return Utility.response(site, OK);
+            }
+
             return Utility.response(site, ERROR);
         }
     },

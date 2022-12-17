@@ -60,6 +60,7 @@ public class MoviesPage extends Page {
                 site.getCurrentMoviesList().add(movie);
             }
         }
+        site.setCurrentMovie(null);
 
         return Utility.response(site, ResponseCodes.OK);
     }

@@ -29,6 +29,7 @@ public class LoginPage extends Page {
      */
     public ObjectNode setState(final ActionInput input, final Database site) {
         site.getCurrentMoviesList().clear();
+        site.setCurrentMovie(null);
         return null;
     }
 }

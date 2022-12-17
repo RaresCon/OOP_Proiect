@@ -1,6 +1,28 @@
 package site.pages;
 
+import site.SiteConnection;
+
 public final class PageFactory {
+    public static PageFactory instance = null;
+
+    /**
+     * default private constructor for Singleton
+     */
+    private PageFactory(){
+    }
+
+    /**
+     * getter
+     * @return the instance of PageFactory
+     */
+    public static PageFactory getInstance() {
+        if (instance == null) {
+            instance = new PageFactory();
+        }
+
+        return instance;
+    }
+
     /**
      * factory to get a new type of page
      * @param pageType the requested page type

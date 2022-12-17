@@ -5,22 +5,22 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionInput;
 import input.Input;
 
-public final class Session {
-    private static Session instance = null;
+public final class SiteConnection {
+    private static SiteConnection instance = null;
 
     /**
      * default private constructor for Singleton
      */
-    private Session() {
+    private SiteConnection() {
     }
 
     /**
      * getter
      * @return site connection
      */
-    public static Session getSiteConnection() {
+    public static SiteConnection getSiteConnection() {
         if (instance == null) {
-            instance = new Session();
+            instance = new SiteConnection();
         }
 
         return instance;

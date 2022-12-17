@@ -16,9 +16,10 @@ public class DetailsPage extends Page {
      */
     public DetailsPage(final PageTypes pageType) {
         super(pageType);
-        availableActions.put("purchase", Actions.BUY_MOVIE);
+        availableActions.put("purchase", Actions.PURCHASE_MOVIE);
         availableActions.put("watch", Actions.WATCH_MOVIE);
         availableActions.put("like", Actions.LIKE_MOVIE);
+        availableActions.put("unlike", Actions.UNLIKE_MOVIE);
         availableActions.put("rate", Actions.RATE_MOVIE);
     }
 

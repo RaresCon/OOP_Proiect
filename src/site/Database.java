@@ -29,7 +29,7 @@ public final class Database {
      * the site architect has to put here all the pages that he wants to have on the site
      */
     public Database() {
-        PageFactory factory = new PageFactory();
+        PageFactory factory = PageFactory.getInstance();
         pageStructure.put(PageTypes.HOMEPAGE_NOAUTH, factory.getPage(PageTypes.HOMEPAGE_NOAUTH));
         pageStructure.put(PageTypes.HOMEPAGE_AUTH, factory.getPage(PageTypes.HOMEPAGE_AUTH));
         pageStructure.put(PageTypes.REGISTERPAGE, factory.getPage(PageTypes.REGISTERPAGE));

@@ -37,6 +37,13 @@ public class Movie {
     }
 
     /**
+     * function to decrement the number of likes
+     */
+    public void subNumLikes() {
+        numLikes -= 1;
+    }
+
+    /**
      * getter
      * @return the name of the movie
      */

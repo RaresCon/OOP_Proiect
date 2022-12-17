@@ -1,39 +1,42 @@
 package site.pages;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionInput;
-import site.SiteStructure;
-import site.movies.Movie;
+import site.Database;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-public abstract class Page {
-    protected PageTypes pageType;
-    protected HashMap<String, PageTypes> accessiblePages = new HashMap<>();
-    protected HashMap<String, Actions> availableActions = new HashMap<>();
+public abstract class Page implements PageFunctions {
+    protected final PageTypes pageType;
+    protected final HashMap<String, PageTypes> accessiblePages = new HashMap<>();
+    protected final HashMap<String, Actions> availableActions = new HashMap<>();
 
-    public Page(PageTypes pageType) {
+    /**
+     * constructor
+     * @param pageType the type of the new page
+     */
+    public Page(final PageTypes pageType) {
         this.pageType = pageType;
     }
 
-    public abstract void linkToPages();
-
-    public boolean setNextPage(ActionInput action, SiteStructure site) {
+    /**
+     * function to set the next page
+     * @param action the action that gives the next page
+     * @param site the site database
+     * @return true if the change was possible, false otherwise
+     */
+    public boolean setNextPage(final ActionInput action, final Database site) {
         if (accessiblePages.containsKey(action.getPage())) {
             site.setCurrentPage(site.getPageStructure().get(accessiblePages.get(action.getPage())));
+            site.setCurrentMovie(null);
             return true;
         }
-
         return false;
     }
 
-    public ObjectNode setState(ActionInput input, SiteStructure site) {
-        site.getCurrentMoviesList().clear();
-        return null;
-    }
-
+    /**
+     * getter
+     * @return the available actions of the page
+     */
     public HashMap<String, Actions> getAvailableActions() {
         return availableActions;
     }

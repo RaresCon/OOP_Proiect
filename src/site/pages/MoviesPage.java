@@ -1,21 +1,26 @@
 package site.pages;
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionInput;
-import site.SiteStructure;
+import site.ResponseCodes;
+import site.Database;
 import site.Utility;
 import site.movies.Movie;
 
 public class MoviesPage extends Page {
-
-    public MoviesPage(PageTypes pageType) {
+    /**
+     * constructor that also sets available actions on the page
+     * @param pageType the type of the new page
+     */
+    public MoviesPage(final PageTypes pageType) {
         super(pageType);
         availableActions.put("search", Actions.SEARCH);
         availableActions.put("filter", Actions.FILTER);
     }
 
-    @Override
+    /**
+     * function to link this page to other pages
+     */
     public void linkToPages() {
         accessiblePages.put("homepage", PageTypes.HOMEPAGE_AUTH);
         accessiblePages.put("see details", PageTypes.DETAILSPAGE);
@@ -23,9 +28,15 @@ public class MoviesPage extends Page {
         accessiblePages.put("movies", PageTypes.MOVIESPAGE);
     }
 
-    public boolean setNextPage(ActionInput action, SiteStructure site) {
+    /**
+     * function to set the next page for the current session
+     * @param action the action that gives the next page
+     * @param site the site database
+     * @return true if the change was possible, false otherwise
+     */
+    public boolean setNextPage(final ActionInput action, final Database site) {
         if (action.getPage().equals("see details")
-            && site.listContainsMovie(site.getCurrentMoviesList(), action.getMovie()) != null) {
+            && site.getMovieFromList(site.getCurrentMoviesList(), action.getMovie()) != null) {
             site.setCurrentPage(site.getPageStructure().get(accessiblePages.get(action.getPage())));
             return true;
         } else if (action.getPage().equals("see details")) {
@@ -35,8 +46,13 @@ public class MoviesPage extends Page {
         return super.setNextPage(action, site);
     }
 
-    @Override
-    public ObjectNode setState(ActionInput action, SiteStructure site) {
+    /**
+     * function to set the state of the current session
+     * @param action action that sets the state
+     * @param site the site database
+     * @return the output
+     */
+    public ObjectNode setState(final ActionInput action, final Database site) {
         site.getCurrentMoviesList().clear();
         for (Movie movie : site.getMoviesDataBase()) {
             if (!movie.getCountriesBanned()
@@ -45,11 +61,6 @@ public class MoviesPage extends Page {
             }
         }
 
-        ObjectNode output = JsonNodeFactory.instance.objectNode();
-        output.put("error", (String)null);
-        output.replace("currentMoviesList", Utility.movieListOutput(site.getCurrentMoviesList()));
-        output.replace("currentUser", Utility.userOutput(site.getCurrentUser()));
-
-        return output;
+        return Utility.response(site, ResponseCodes.OK);
     }
 }

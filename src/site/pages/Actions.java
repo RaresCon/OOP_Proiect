@@ -1,173 +1,194 @@
 package site.pages;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionInput;
-import site.SiteStructure;
+import site.Config;
+import site.Database;
+import site.Utility;
 import site.account.Account;
 import site.account.AccountFactory;
-import site.account.PremiumAccount;
-import site.account.StandardAccount;
 import site.movies.Filter;
 import site.movies.Movie;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static site.ResponseCodes.*;
 
 public enum Actions {
     LOGIN {
         @Override
-        public boolean executeAction(ActionInput action, SiteStructure site) {
-            for (Account user : site.getUsers()) {
+        public ObjectNode executeAction(final ActionInput action, final Database site) {
+            for (Account user : site.getUsersDataBase()) {
                 if (user.checkCreds(action.getCredentials())) {
                     site.setCurrentUser(user);
                     site.setCurrentPage(site.getPageStructure().get(PageTypes.HOMEPAGE_AUTH));
-                    return true;
+                    return Utility.response(site, OK);
                 }
             }
             site.setCurrentPage(site.getPageStructure().get(PageTypes.HOMEPAGE_NOAUTH));
 
-            return false;
+            return Utility.response(site, ERROR);
         }
     },
 
     REGISTER {
         @Override
-        public boolean executeAction(ActionInput action, SiteStructure site) {
+        public ObjectNode executeAction(final ActionInput action, final Database site) {
             if (action.getCredentials().getName().isEmpty()
                 || action.getCredentials().getPassword().isEmpty()
-                || action.getCredentials().getCountry().isEmpty())
-                return false;
+                || action.getCredentials().getCountry().isEmpty()) {
+                return Utility.response(site, ERROR);
+            }
 
-            for (Account user : site.getUsers()) {
+            for (Account user : site.getUsersDataBase()) {
                 if (user.getCreds().getName().equals(action.getCredentials().getName())) {
                     site.setCurrentPage(site.getPageStructure().get(PageTypes.HOMEPAGE_NOAUTH));
-                    return false;
+                    return Utility.response(site, ERROR);
                 }
             }
 
-            AccountFactory factory = new AccountFactory();
-            Account newUser = factory.getAccount(action.getCredentials().getAccountType(),
-                                                 action.getCredentials());
+            AccountFactory factory = AccountFactory.getInstance();
+            Account newUser = factory.getAccount(action.getCredentials());
 
-            site.getUsers().add(newUser);
+            site.getUsersDataBase().add(newUser);
             site.setCurrentUser(newUser);
 
             site.setCurrentPage(site.getPageStructure().get(PageTypes.HOMEPAGE_AUTH));
-            return true;
+            return Utility.response(site, OK);
         }
     },
 
     SEARCH {
         @Override
-        public boolean executeAction(ActionInput action, SiteStructure site) {
+        public ObjectNode executeAction(final ActionInput action, final Database site) {
             List<Movie> currentMovies = site.getCurrentMoviesList();
             currentMovies.removeIf(movie -> !movie.getName().startsWith(action.getStartsWith()));
 
-            return true;
+            return Utility.response(site, OK);
         }
     },
 
     FILTER {
         @Override
-        public boolean executeAction(ActionInput action, SiteStructure site) {
+        public ObjectNode executeAction(final ActionInput action, final Database site) {
             site.getCurrentPage().setState(null, site);
 
-            if (action.getFilters().getSort() != null)
+            if (action.getFilters().getSort() != null) {
                 Filter.sortMovies(site.getCurrentMoviesList(),
                                   action.getFilters().getSort());
+            }
 
-            if (action.getFilters().getContains() != null)
+            if (action.getFilters().getContains() != null) {
                 Filter.filterMovies(site.getCurrentMoviesList(),
                                     action.getFilters().getContains());
-            return true;
+            }
+
+            return Utility.response(site, OK);
         }
     },
 
     BUY_TOKENS {
         @Override
-        public boolean executeAction(ActionInput action, SiteStructure site) {
+        public ObjectNode executeAction(final ActionInput action, final Database site) {
             if (action.getCount() <= site.getCurrentUser().getCreds().getBalance()) {
                 site.getCurrentUser().getCreds().subBalance(action.getCount());
                 site.getCurrentUser().addTokens(action.getCount());
 
-                return true;
+                return null;
             }
 
-            return false;
+            return Utility.response(site, ERROR);
         }
     },
 
     BUY_PREMIUM {
         @Override
-        public boolean executeAction(ActionInput action, SiteStructure site) {
-            if (10 <= site.getCurrentUser().getTokensCount()) {
-                site.getCurrentUser().subTokens(10);
+        public ObjectNode executeAction(final ActionInput action, final Database site) {
+            if (Config.PREMIUM_PRICE <= site.getCurrentUser().getTokensCount()) {
+                site.getCurrentUser().subTokens(Config.PREMIUM_PRICE);
                 site.getCurrentUser().getCreds().setAccountType("premium");
 
-                return true;
+                return null;
             }
 
-            return false;
+            return Utility.response(site, OK);
         }
     },
 
     BUY_MOVIE {
         @Override
-        public boolean executeAction(ActionInput action, SiteStructure site) {
+        public ObjectNode executeAction(final ActionInput action, final Database site) {
             if (site.getCurrentUser().getNumFreePremiumMovies() > 0
                 && site.getCurrentUser().getCreds().getAccountType().equals("premium")) {
                 site.getCurrentUser().subNumFreePremiumMovies();
                 site.getCurrentUser().getPurchasedMovies()
                                      .addAll(site.getCurrentMoviesList());
 
-                return true;
-            } else if (2 <= site.getCurrentUser().getTokensCount()) {
+                return Utility.response(site, OK);
+            } else if (Config.MOVIE_PRICE <= site.getCurrentUser().getTokensCount()) {
                 site.getCurrentUser().getPurchasedMovies()
                                      .addAll(site.getCurrentMoviesList());
-                site.getCurrentUser().subTokens(2);
+                site.getCurrentUser().subTokens(Config.MOVIE_PRICE);
 
-                return true;
+                return Utility.response(site, OK);
             }
 
-            return false;
+            return Utility.response(site, ERROR);
         }
     },
 
     WATCH_MOVIE {
         @Override
-        public boolean executeAction(ActionInput action, SiteStructure site) {
+        public ObjectNode executeAction(final ActionInput action, final Database site) {
+            Account currentUser = site.getCurrentUser();
+            List<Movie> userWatchedMovies = currentUser.getWatchedMovies();
+
+            if (site.getMovieFromList(userWatchedMovies, site.getCurrentMovie()) != null) {
+                return Utility.response(site, OK);
+            }
+
             if (site.getCurrentUser().getPurchasedMovies()
                                      .containsAll(site.getCurrentMoviesList())) {
                 site.getCurrentUser().getWatchedMovies()
                         .addAll(site.getCurrentMoviesList());
-                return true;
+                return Utility.response(site, OK);
             }
 
-            return false;
+            return Utility.response(site, ERROR);
         }
     },
 
     LIKE_MOVIE {
         @Override
-        public boolean executeAction(ActionInput action, SiteStructure site) {
+        public ObjectNode executeAction(final ActionInput action, final Database site) {
             Account currentUser = site.getCurrentUser();
+            List<Movie> userLikedMovies = currentUser.getLikedMovies();
+
+            if (site.getMovieFromList(userLikedMovies, site.getCurrentMovie()) != null) {
+                return Utility.response(site, ERROR);
+            }
+
             for (Movie movie : site.getCurrentMoviesList()) {
                 if (currentUser.getWatchedMovies().contains(movie)) {
                     currentUser.getLikedMovies().add(movie);
                     movie.incNumLikes();
-                    return true;
+                    return Utility.response(site, OK);
                 }
             }
-            return false;
+            return Utility.response(site, ERROR);
         }
     },
 
     RATE_MOVIE {
         @Override
-        public boolean executeAction(ActionInput action, SiteStructure site) {
+        public ObjectNode executeAction(final ActionInput action, final Database site) {
             Account currentUser = site.getCurrentUser();
+            List<Movie> userRatesMovies = currentUser.getRatedMovies();
 
-            if (action.getRate() > 5 || action.getRate() < 0) {
-                return false;
+            if (action.getRate() > Config.MAX_RATING
+                || action.getRate() < 0
+                || site.getMovieFromList(userRatesMovies, site.getCurrentMovie()) != null) {
+                return Utility.response(site, ERROR);
             }
 
             for (Movie movie : site.getCurrentMoviesList()) {
@@ -175,17 +196,18 @@ public enum Actions {
                     currentUser.getRatedMovies().add(movie);
                     movie.getRatings().add((double) action.getRate());
 
-                    return true;
+                    return Utility.response(site, OK);
                 }
             }
-            return false;
+            return Utility.response(site, ERROR);
         }
     };
 
     /**
-     *
-     * @param
-     * @return
+     * abstract function that implements the effect of each action that a user can execute
+     * @param action the action info to be checked and applied to the site database
+     * @return an ObjectNode representing the response from the database which can be a successful
+     * output or an error output
      */
-    public abstract boolean executeAction(ActionInput action, SiteStructure site);
+    public abstract ObjectNode executeAction(ActionInput action, Database site);
 }

@@ -1,13 +1,34 @@
 package site.pages;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import input.ActionInput;
+import site.Database;
+
 public class HomePageNoAuth extends Page {
-    public HomePageNoAuth(PageTypes pageType) {
+    /**
+     * constructor that also sets available actions on the page
+     * @param pageType the type of the new page
+     */
+    public HomePageNoAuth(final PageTypes pageType) {
         super(pageType);
     }
 
-    @Override
+    /**
+     * function to link this page to other pages
+     */
     public void linkToPages() {
         accessiblePages.put("login", PageTypes.LOGINPAGE);
         accessiblePages.put("register", PageTypes.REGISTERPAGE);
+    }
+
+    /**
+     * function to set the state for the current session
+     * @param input action that sets the state
+     * @param site the site database
+     * @return the output
+     */
+    public ObjectNode setState(final ActionInput input, final Database site) {
+        site.getCurrentMoviesList().clear();
+        return null;
     }
 }

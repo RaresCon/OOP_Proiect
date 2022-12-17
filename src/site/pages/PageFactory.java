@@ -1,7 +1,13 @@
 package site.pages;
 
 public final class PageFactory {
-    public Page getPage(PageTypes pageType) {
+    /**
+     * factory to get a new type of page
+     * @param pageType the requested page type
+     * @throws IllegalArgumentException if the requested page isn't recognized by the factory
+     * @return the newly created instance of the requested page
+     */
+    public Page getPage(final PageTypes pageType) {
         switch (pageType) {
             case HOMEPAGE_NOAUTH -> {
                 return new HomePageNoAuth(PageTypes.HOMEPAGE_NOAUTH);
@@ -27,7 +33,8 @@ public final class PageFactory {
             case LOGOUTPAGE -> {
                 return new LogoutPage(PageTypes.LOGOUTPAGE);
             }
+            default -> throw new IllegalArgumentException("PAGE FACTORY ERROR: The requested page"
+                                                          + "is not implemented.");
         }
-        return null;
     }
 }

@@ -1,20 +1,20 @@
 package site.pages;
 
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionInput;
-import site.SiteStructure;
+import site.Database;
 import site.Utility;
 import site.movies.Movie;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import static site.ResponseCodes.OK;
 
 public class DetailsPage extends Page {
 
-    public DetailsPage(PageTypes pageType) {
+    /**
+     * constructor that also sets available actions on the page
+     * @param pageType the type of the new page
+     */
+    public DetailsPage(final PageTypes pageType) {
         super(pageType);
         availableActions.put("purchase", Actions.BUY_MOVIE);
         availableActions.put("watch", Actions.WATCH_MOVIE);
@@ -22,7 +22,10 @@ public class DetailsPage extends Page {
         availableActions.put("rate", Actions.RATE_MOVIE);
     }
 
-    @Override
+    /**
+     * function to link with other pages of the site architecture,
+     * update this if you want to have any other link to any other page
+     */
     public void linkToPages() {
         accessiblePages.put("homepage", PageTypes.HOMEPAGE_AUTH);
         accessiblePages.put("movies", PageTypes.MOVIESPAGE);
@@ -30,17 +33,19 @@ public class DetailsPage extends Page {
         accessiblePages.put("logout", PageTypes.LOGOUTPAGE);
     }
 
-    public ObjectNode setState(ActionInput action, SiteStructure site) {
-        Movie foundMovie = site.listContainsMovie(site.getCurrentMoviesList(), action.getMovie());
+    /**
+     * function to set the state of the site when arriving at this page
+     * @param action the action that sets the state
+     * @param site the site database
+     * @return output
+     */
+    public ObjectNode setState(final ActionInput action, final Database site) {
+        Movie foundMovie = site.getMovieFromList(site.getCurrentMoviesList(), action.getMovie());
 
         site.getCurrentMoviesList().clear();
+        site.setCurrentMovie(action.getMovie());
         site.getCurrentMoviesList().add(foundMovie);
 
-        ObjectNode output = JsonNodeFactory.instance.objectNode();
-        output.put("error", (String)null);
-        output.replace("currentMoviesList", Utility.movieListOutput(site.getCurrentMoviesList()));
-        output.replace("currentUser", Utility.userOutput(site.getCurrentUser()));
-
-        return output;
+        return Utility.response(site, OK);
     }
 }

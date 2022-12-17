@@ -1,9 +1,14 @@
 package site.account;
 
-public class StandardAccount extends Account {
+import site.Config;
 
-    public StandardAccount(Credentials creds) {
+public class StandardAccount extends Account {
+    /**
+     * constructor
+     * @param creds the credentials used for the new user
+     */
+    public StandardAccount(final Credentials creds) {
         super(creds);
-        numFreePremiumMovies = 15;
+        numFreePremiumMovies = Config.STARTING_NUM_FREE_MOVIES;
     }
 }

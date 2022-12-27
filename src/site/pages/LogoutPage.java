@@ -31,6 +31,7 @@ public class LogoutPage extends Page {
         site.setCurrentUser(null);
         site.getCurrentMoviesList().clear();
         site.setCurrentMovie(null);
+        site.getPagesStack().clear();
 
         return null;
     }

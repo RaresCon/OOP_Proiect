@@ -3,6 +3,9 @@ package site.pages;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionInput;
 import site.Database;
+import site.Utility;
+
+import static site.ResponseCodes.ERROR;
 
 public class HomePageAuth extends Page {
     /**
@@ -31,6 +34,20 @@ public class HomePageAuth extends Page {
     public ObjectNode setState(final ActionInput input, final Database site) {
         site.getCurrentMoviesList().clear();
         site.setCurrentMovie(null);
+
+        return null;
+    }
+
+    /**
+     *
+     * @param site
+     * @return
+     */
+    public ObjectNode setPrevPage(Database site) {
+        if (super.setPrevPage(site) == null) {
+            return Utility.response(null, ERROR);
+        }
+
         return null;
     }
 }

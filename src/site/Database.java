@@ -8,10 +8,7 @@ import site.account.AccountFactory;
 import site.movies.Movie;
 import site.pages.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static site.ResponseCodes.ERROR;
 
@@ -23,6 +20,7 @@ public final class Database {
     private Account currentUser;
     private Page currentPage;
     private String currentMovie;
+    private final Stack<PageState> pagesStack = new Stack<>();
 
     /**
      * the database construction with all the pages created by the site architect
@@ -63,6 +61,14 @@ public final class Database {
     public ObjectNode changePage(final ActionInput action) {
         if (currentPage.setNextPage(action, this)) {
             return currentPage.setState(action, this);
+        } else {
+            return Utility.response(null, ERROR);
+        }
+    }
+
+    public ObjectNode backPage() {
+        if (currentUser != null && !pagesStack.empty()) {
+            return currentPage.setPrevPage(this);
         } else {
             return Utility.response(null, ERROR);
         }
@@ -185,5 +191,9 @@ public final class Database {
      */
     public void setCurrentMovie(final String currentMovie) {
         this.currentMovie = currentMovie;
+    }
+
+    public Stack<PageState> getPagesStack() {
+        return pagesStack;
     }
 }

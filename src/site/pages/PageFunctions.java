@@ -26,4 +26,11 @@ public interface PageFunctions {
      * @return output
      */
     ObjectNode setState(ActionInput input, Database site);
+
+    /**
+     *
+     * @param site
+     * @return
+     */
+    ObjectNode setPrevPage(Database site);
 }

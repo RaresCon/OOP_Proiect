@@ -2,6 +2,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import input.Input;
+import jdk.jshell.spi.ExecutionControl;
 import site.SiteConnection;
 
 import java.io.File;
@@ -17,7 +18,11 @@ public final class Main {
 
         ArrayNode output = objectMapper.createArrayNode();
 
-        SiteConnection.getSiteConnection().processInput(inputData, output);
+        try {
+            SiteConnection.getSiteConnection().processInput(inputData, output);
+        } catch (ExecutionControl.InternalException e) {
+            throw new RuntimeException(e);
+        }
 
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(args[1]), output);

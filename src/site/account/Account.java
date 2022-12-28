@@ -7,12 +7,14 @@ import java.util.List;
 
 public abstract class Account {
     private Credentials creds;
-    private int tokensCount = 0;
+    protected int tokensCount = 0;
     protected int numFreePremiumMovies;
     private final List<Movie> purchasedMovies = new ArrayList<>();
     private final List<Movie> watchedMovies = new ArrayList<>();
     private final List<Movie> likedMovies = new ArrayList<>();
     private final List<Movie> ratedMovies = new ArrayList<>();
+    private final List<Notification> notifications = new ArrayList<>();
+    private final List<String> subbedGenres = new ArrayList<>();
 
     /**
      * constructor
@@ -54,6 +56,8 @@ public abstract class Account {
     public void subNumFreePremiumMovies() {
         numFreePremiumMovies -= 1;
     }
+
+    public abstract void refundCost();
 
     /**
      * getter
@@ -109,5 +113,13 @@ public abstract class Account {
      */
     public int getNumFreePremiumMovies() {
         return numFreePremiumMovies;
+    }
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public List<String> getSubbedGenres() {
+        return subbedGenres;
     }
 }

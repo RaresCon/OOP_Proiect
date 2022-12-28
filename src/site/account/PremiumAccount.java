@@ -11,4 +11,8 @@ public class PremiumAccount extends Account {
         super(creds);
         numFreePremiumMovies = Config.STARTING_NUM_FREE_MOVIES;
     }
+
+    public void refundCost() {
+        numFreePremiumMovies += 1;
+    }
 }

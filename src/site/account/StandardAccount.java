@@ -11,4 +11,8 @@ public class StandardAccount extends Account {
         super(creds);
         numFreePremiumMovies = Config.STARTING_NUM_FREE_MOVIES;
     }
+
+    public void refundCost() {
+        tokensCount += 2;
+    }
 }

@@ -5,6 +5,7 @@ import input.ActionInput;
 import site.ResponseCodes;
 import site.Database;
 import site.Utility;
+import site.actions.UserActions;
 import site.movies.Movie;
 
 public class MoviesPage extends Page {
@@ -14,8 +15,8 @@ public class MoviesPage extends Page {
      */
     public MoviesPage(final PageTypes pageType) {
         super(pageType);
-        availableActions.put("search", Actions.SEARCH);
-        availableActions.put("filter", Actions.FILTER);
+        availableActions.put("search", UserActions.SEARCH);
+        availableActions.put("filter", UserActions.FILTER);
     }
 
     /**

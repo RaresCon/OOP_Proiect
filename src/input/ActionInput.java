@@ -1,6 +1,7 @@
 package input;
 
 import site.account.Credentials;
+import site.movies.Movie;
 
 public final class ActionInput {
     private String type;
@@ -13,6 +14,9 @@ public final class ActionInput {
     private String objectType;
     private String movie;
     private int rate;
+    private String subscribedGenre;
+    private Movie addedMovie;
+    private String deletedMovie;
 
     /**
      * getter
@@ -84,5 +88,17 @@ public final class ActionInput {
      */
     public FilterInput getFilters() {
         return filters;
+    }
+
+    public String getSubscribedGenre() {
+        return subscribedGenre;
+    }
+
+    public Movie getAddedMovie() {
+        return addedMovie;
+    }
+
+    public String getDeletedMovie() {
+        return deletedMovie;
     }
 }

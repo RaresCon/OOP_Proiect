@@ -3,6 +3,7 @@ package site.pages;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionInput;
 import site.Database;
+import site.actions.UserActions;
 
 public class UpgradesPage extends Page {
     /**
@@ -11,8 +12,8 @@ public class UpgradesPage extends Page {
      */
     public UpgradesPage(final PageTypes pageType) {
         super(pageType);
-        availableActions.put("buy premium account", Actions.BUY_PREMIUM);
-        availableActions.put("buy tokens", Actions.BUY_TOKENS);
+        availableActions.put("buy premium account", UserActions.BUY_PREMIUM);
+        availableActions.put("buy tokens", UserActions.BUY_TOKENS);
     }
 
     /**

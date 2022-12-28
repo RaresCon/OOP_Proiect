@@ -5,6 +5,7 @@ import input.ActionInput;
 import input.Input;
 import site.account.Account;
 import site.account.AccountFactory;
+import site.actions.AdminActions;
 import site.movies.Movie;
 import site.pages.*;
 
@@ -17,6 +18,7 @@ public final class Database {
     private final List<Account> usersDataBase = new ArrayList<>();
     private final List<Movie> currentMoviesList = new ArrayList<>();
     private final List<Movie> moviesDataBase = new ArrayList<>();
+    private final HashMap<String, AdminActions> adminActions = new HashMap<>();
     private Account currentUser;
     private Page currentPage;
     private String currentMovie;
@@ -39,6 +41,8 @@ public final class Database {
 
         linkPagesAuth();
         currentPage = pageStructure.get(PageTypes.HOMEPAGE_NOAUTH);
+        adminActions.put("add", AdminActions.ADD_MOVIE);
+        adminActions.put("delete", AdminActions.DELETE_MOVIE);
     }
 
     /**
@@ -86,6 +90,23 @@ public final class Database {
 
         return currentPage.getAvailableActions().get(action.getFeature())
                           .executeAction(action, this);
+    }
+
+    public ObjectNode subscribeUser(ActionInput action) {
+        if (!currentPage.getAvailableActions().containsKey(action.getType())) {
+            return Utility.response(null, ERROR);
+        }
+
+        return currentPage.getAvailableActions().get(action.getType())
+                          .executeAction(action, this);
+    }
+
+    public ObjectNode modifyDatabase(ActionInput action) {
+        if (!adminActions.containsKey(action.getFeature())) {
+            return Utility.response(this, ERROR);
+        }
+
+        return adminActions.get(action.getFeature()).executeAction(action, this);
     }
 
     /**

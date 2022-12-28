@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import site.account.Account;
 import site.account.Credentials;
+import site.account.Notification;
 import site.movies.Movie;
 
 import java.util.ArrayList;
@@ -93,6 +94,7 @@ public final class Utility {
         userOutput.replace("watchedMovies", movieListOutput(user.getWatchedMovies()));
         userOutput.replace("likedMovies", movieListOutput(user.getLikedMovies()));
         userOutput.replace("ratedMovies", movieListOutput(user.getRatedMovies()));
+        userOutput.replace("notifications", notifListOutput(user.getNotifications()));
 
         return userOutput;
     }
@@ -112,5 +114,22 @@ public final class Utility {
         credsOutput.put("balance", String.valueOf(creds.getBalance()));
 
         return credsOutput;
+    }
+
+    private static ObjectNode notificationOutput(final Notification notification) {
+        ObjectNode notificationOutput = JsonNodeFactory.instance.objectNode();
+
+        notificationOutput.put("movieName", notification.movieName());
+        notificationOutput.put("message", notification.message());
+
+        return notificationOutput;
+    }
+
+    private static ArrayNode notifListOutput(final List<Notification> notifList) {
+        ArrayNode notifListOutput = JsonNodeFactory.instance.arrayNode();
+
+        notifList.forEach(notification -> notifListOutput.add(notificationOutput(notification)));
+
+        return notifListOutput;
     }
 }

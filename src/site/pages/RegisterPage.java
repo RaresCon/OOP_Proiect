@@ -3,6 +3,7 @@ package site.pages;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionInput;
 import site.Database;
+import site.actions.UserActions;
 
 public class RegisterPage extends Page {
     /**
@@ -11,7 +12,7 @@ public class RegisterPage extends Page {
      */
     public RegisterPage(final PageTypes pageType) {
         super(pageType);
-        availableActions.put("register", Actions.REGISTER);
+        availableActions.put("register", UserActions.REGISTER);
     }
 
     /**

@@ -3,6 +3,7 @@ package site.pages;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionInput;
 import site.Database;
+import site.actions.UserActions;
 
 public class LoginPage extends Page {
     /**
@@ -11,7 +12,7 @@ public class LoginPage extends Page {
      */
     public LoginPage(final PageTypes pageType) {
         super(pageType);
-        availableActions.put("login", Actions.LOGIN);
+        availableActions.put("login", UserActions.LOGIN);
     }
 
     /**

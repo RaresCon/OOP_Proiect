@@ -1,4 +1,4 @@
-package site.pages;
+package site.actions;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionInput;
@@ -9,12 +9,13 @@ import site.account.Account;
 import site.account.AccountFactory;
 import site.movies.Filter;
 import site.movies.Movie;
+import site.pages.PageTypes;
 
 import java.util.List;
 
 import static site.ResponseCodes.*;
 
-public enum Actions {
+public enum UserActions implements Action {
     LOGIN {
         @Override
         public ObjectNode executeAction(final ActionInput action, final Database site) {
@@ -226,13 +227,24 @@ public enum Actions {
             }
             return Utility.response(site, ERROR);
         }
-    };
+    },
 
-    /**
-     * abstract function that implements the effect of each action that a user can execute
-     * @param action the action info to be checked and applied to the site database
-     * @return an ObjectNode representing the response from the database which can be a successful
-     * output or an error output
-     */
-    public abstract ObjectNode executeAction(ActionInput action, Database site);
+    SUBSCRIBE {
+        @Override
+        public ObjectNode executeAction(ActionInput action, Database site) {
+            if (site.getCurrentUser().getSubbedGenres().contains(action.getSubscribedGenre())) {
+                return Utility.response(site, ERROR);
+            }
+
+            for (Movie movie : site.getCurrentMoviesList()) {
+                if (!movie.getGenres().contains(action.getSubscribedGenre())) {
+                    return Utility.response(site, ERROR);
+                }
+            }
+
+            site.getCurrentUser().getSubbedGenres().add(action.getSubscribedGenre());
+
+            return null;
+        }
+    }
 }

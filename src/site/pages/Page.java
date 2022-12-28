@@ -4,16 +4,16 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionInput;
 import site.Database;
 import site.Utility;
+import site.actions.UserActions;
 
 import java.util.HashMap;
 
-import static site.ResponseCodes.ERROR;
 import static site.ResponseCodes.OK;
 
 public abstract class Page implements PageFunctions {
     protected final PageTypes pageType;
     protected final HashMap<String, PageTypes> accessiblePages = new HashMap<>();
-    protected final HashMap<String, Actions> availableActions = new HashMap<>();
+    protected final HashMap<String, UserActions> availableActions = new HashMap<>();
 
     /**
      * constructor
@@ -64,7 +64,7 @@ public abstract class Page implements PageFunctions {
      * getter
      * @return the available actions of the page
      */
-    public HashMap<String, Actions> getAvailableActions() {
+    public HashMap<String, UserActions> getAvailableActions() {
         return availableActions;
     }
 }

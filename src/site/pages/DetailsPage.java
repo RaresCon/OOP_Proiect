@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionInput;
 import site.Database;
 import site.Utility;
+import site.actions.UserActions;
 import site.movies.Movie;
 
 import static site.ResponseCodes.OK;
@@ -16,11 +17,12 @@ public class DetailsPage extends Page {
      */
     public DetailsPage(final PageTypes pageType) {
         super(pageType);
-        availableActions.put("purchase", Actions.PURCHASE_MOVIE);
-        availableActions.put("watch", Actions.WATCH_MOVIE);
-        availableActions.put("like", Actions.LIKE_MOVIE);
-        availableActions.put("unlike", Actions.UNLIKE_MOVIE);
-        availableActions.put("rate", Actions.RATE_MOVIE);
+        availableActions.put("purchase", UserActions.PURCHASE_MOVIE);
+        availableActions.put("watch", UserActions.WATCH_MOVIE);
+        availableActions.put("like", UserActions.LIKE_MOVIE);
+        availableActions.put("unlike", UserActions.UNLIKE_MOVIE);
+        availableActions.put("rate", UserActions.RATE_MOVIE);
+        availableActions.put("subscribe", UserActions.SUBSCRIBE);
     }
 
     /**

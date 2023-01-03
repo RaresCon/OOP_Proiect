@@ -5,6 +5,7 @@ import input.ActionInput;
 import site.Database;
 import site.Utility;
 import site.account.Account;
+import site.notifications.Notification;
 import site.movies.Movie;
 
 import static site.ResponseCodes.ERROR;
@@ -18,6 +19,8 @@ public enum AdminActions implements Action {
             }
 
             site.getMoviesDataBase().add(action.getAddedMovie());
+            site.notifyObservers(new Notification(action.getAddedMovie().getName(),
+                                                  action.getFeature().toUpperCase()));
 
             return null;
         }
@@ -33,6 +36,9 @@ public enum AdminActions implements Action {
             }
 
             for (Account user : site.getUsersDataBase()) {
+                site.notifyObservers(new Notification(action.getAddedMovie().getName(),
+                                                      action.getFeature().toUpperCase()));
+
                 if (user.getPurchasedMovies().remove(foundMovie)) {
                     user.refundCost();
                     user.getWatchedMovies().remove(foundMovie);

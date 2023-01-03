@@ -7,13 +7,15 @@ import site.account.Account;
 import site.account.AccountFactory;
 import site.actions.AdminActions;
 import site.movies.Movie;
+import site.notifications.DatabaseObserver;
+import site.notifications.Observable;
 import site.pages.*;
 
 import java.util.*;
 
 import static site.ResponseCodes.ERROR;
 
-public final class Database {
+public final class Database extends Observable {
     private final HashMap<PageTypes, Page> pageStructure = new HashMap<>();
     private final List<Account> usersDataBase = new ArrayList<>();
     private final List<Movie> currentMoviesList = new ArrayList<>();
@@ -43,6 +45,7 @@ public final class Database {
         currentPage = pageStructure.get(PageTypes.HOMEPAGE_NOAUTH);
         adminActions.put("add", AdminActions.ADD_MOVIE);
         adminActions.put("delete", AdminActions.DELETE_MOVIE);
+        this.addObserver(new DatabaseObserver(this));
     }
 
     /**

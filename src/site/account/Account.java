@@ -1,6 +1,7 @@
 package site.account;
 
 import site.movies.Movie;
+import site.notifications.Notification;
 
 import java.util.ArrayList;
 import java.util.List;

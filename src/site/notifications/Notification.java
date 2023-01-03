@@ -1,4 +1,4 @@
-package site.account;
+package site.notifications;
 
 public record Notification(String movieName, String message) {
     public Notification(String movieName, String message) {

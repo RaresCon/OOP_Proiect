@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import site.account.Account;
 import site.account.Credentials;
-import site.account.Notification;
+import site.notifications.Notification;
 import site.movies.Movie;
 
 import java.util.ArrayList;

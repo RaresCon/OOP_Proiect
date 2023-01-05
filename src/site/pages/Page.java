@@ -32,7 +32,7 @@ public abstract class Page implements PageFunctions {
     public boolean setNextPage(final ActionInput action, final Database site) {
         if (accessiblePages.containsKey(action.getPage())) {
             if (site.getCurrentUser() != null) {
-                site.getPagesStack().add(new PageState(pageType,
+                site.getPagesStack().add(new PageState(site.getCurrentPage().pageType,
                                                        site.getCurrentMoviesList(),
                                                        site.getCurrentMovie()));
             }
@@ -54,7 +54,15 @@ public abstract class Page implements PageFunctions {
 
         site.setCurrentPage(site.getPageStructure().get(prevState.pageType()));
         site.getCurrentMoviesList().clear();
-        site.getCurrentMoviesList().addAll(prevState.pageMovies());
+        if (prevState.pageType() == PageTypes.MOVIESPAGE) {
+            site.getCurrentPage().setState(null, site);
+        } else if (prevState.pageType() == PageTypes.HOMEPAGE_AUTH) {
+            return null;
+        } else if (prevState.pageType() == PageTypes.UPGRADESPAGE) {
+            return null;
+        } else {
+            site.getCurrentMoviesList().addAll(prevState.pageMovies());
+        }
         site.setCurrentMovie(prevState.currentMovie());
 
         return Utility.response(site, OK);

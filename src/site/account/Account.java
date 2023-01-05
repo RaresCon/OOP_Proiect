@@ -4,18 +4,21 @@ import site.movies.Movie;
 import site.notifications.Notification;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class Account {
-    private Credentials creds;
+    protected Credentials creds;
     protected int tokensCount = 0;
     protected int numFreePremiumMovies;
-    private final List<Movie> purchasedMovies = new ArrayList<>();
-    private final List<Movie> watchedMovies = new ArrayList<>();
-    private final List<Movie> likedMovies = new ArrayList<>();
-    private final List<Movie> ratedMovies = new ArrayList<>();
-    private final List<Notification> notifications = new ArrayList<>();
-    private final List<String> subbedGenres = new ArrayList<>();
+    protected final List<Movie> purchasedMovies = new ArrayList<>();
+    protected final List<Movie> watchedMovies = new ArrayList<>();
+    protected final List<Movie> likedMovies = new ArrayList<>();
+    protected final List<Movie> ratedMovies = new ArrayList<>();
+    protected final HashMap<String, Integer> ratings = new HashMap<>();
+    protected final HashMap<String, Integer> likedGenres = new HashMap<>();
+    protected final List<Notification> notifications = new ArrayList<>();
+    protected final List<String> subbedGenres = new ArrayList<>();
 
     /**
      * constructor
@@ -24,6 +27,10 @@ public abstract class Account {
     public Account(final Credentials creds) {
         this.creds = new Credentials(creds);
     }
+
+    public abstract void refundCost();
+
+    public abstract boolean recommendMovie(List<Movie> availableMovies);
 
     /**
      * function to check if two credentials match, used during login action
@@ -58,7 +65,12 @@ public abstract class Account {
         numFreePremiumMovies -= 1;
     }
 
-    public abstract void refundCost();
+    public void addLikedGenres(Movie movie) {
+        movie.getGenres().forEach(genre -> {
+            likedGenres.computeIfAbsent(genre, value -> 0);
+            likedGenres.computeIfPresent(genre, (key, value) -> value + 1);
+        });
+    }
 
     /**
      * getter
@@ -114,6 +126,10 @@ public abstract class Account {
      */
     public int getNumFreePremiumMovies() {
         return numFreePremiumMovies;
+    }
+
+    public HashMap<String, Integer> getRatings() {
+        return ratings;
     }
 
     public List<Notification> getNotifications() {

@@ -7,13 +7,15 @@ import site.Database;
 import site.Utility;
 import site.account.Account;
 import site.account.AccountFactory;
+import site.account.PremiumAccount;
 import site.movies.Filter;
 import site.movies.Movie;
 import site.pages.PageTypes;
 
 import java.util.List;
 
-import static site.ResponseCodes.*;
+import static site.ResponseCodes.ERROR;
+import static site.ResponseCodes.OK;
 
 public enum UserActions implements Action {
     LOGIN {
@@ -109,6 +111,11 @@ public enum UserActions implements Action {
                 site.getCurrentUser().subTokens(Config.PREMIUM_PRICE);
                 site.getCurrentUser().getCreds().setAccountType("premium");
 
+                PremiumAccount userCopy = new PremiumAccount(site.getCurrentUser());
+                site.getUsersDataBase().remove(site.getCurrentUser());
+                site.getUsersDataBase().add(userCopy);
+                site.setCurrentUser(userCopy);
+
                 return null;
             }
 
@@ -179,6 +186,8 @@ public enum UserActions implements Action {
             for (Movie movie : site.getCurrentMoviesList()) {
                 if (currentUser.getWatchedMovies().contains(movie)) {
                     currentUser.getLikedMovies().add(movie);
+                    currentUser.addLikedGenres(movie);
+
                     movie.incNumLikes();
                     return Utility.response(site, OK);
                 }
@@ -209,18 +218,29 @@ public enum UserActions implements Action {
         @Override
         public ObjectNode executeAction(final ActionInput action, final Database site) {
             Account currentUser = site.getCurrentUser();
-            List<Movie> userRatesMovies = currentUser.getRatedMovies();
+            List<Movie> userRatedMovies = currentUser.getRatedMovies();
+            Movie currentMovie = site.getMovieFromList(site.getCurrentMoviesList(),
+                                                       site.getCurrentMovie());
 
-            if (action.getRate() > Config.MAX_RATING
-                || action.getRate() < 0
-                || site.getMovieFromList(userRatesMovies, site.getCurrentMovie()) != null) {
+            if (action.getRate() > Config.MAX_RATING || action.getRate() < 0) {
                 return Utility.response(site, ERROR);
+            }
+
+            if (currentMovie != null && userRatedMovies.contains(currentMovie)) {
+                double prevRating = currentUser.getRatings().get(site.getCurrentMovie());
+                currentUser.getRatings().put(site.getCurrentMovie(), action.getRate());
+
+                currentMovie.getRatings().remove(prevRating);
+                currentMovie.getRatings().add((double) action.getRate());
+
+                return Utility.response(site, OK);
             }
 
             for (Movie movie : site.getCurrentMoviesList()) {
                 if (currentUser.getWatchedMovies().contains(movie)) {
                     currentUser.getRatedMovies().add(movie);
                     movie.getRatings().add((double) action.getRate());
+                    currentUser.getRatings().put(movie.getName(), action.getRate());
 
                     return Utility.response(site, OK);
                 }

@@ -9,11 +9,15 @@ import site.actions.AdminActions;
 import site.movies.Movie;
 import site.notifications.DatabaseObserver;
 import site.notifications.Observable;
-import site.pages.*;
+import site.pages.Page;
+import site.pages.PageFactory;
+import site.pages.PageState;
+import site.pages.PageTypes;
 
 import java.util.*;
 
 import static site.ResponseCodes.ERROR;
+import static site.ResponseCodes.SUGGESTION;
 
 public final class Database extends Observable {
     private final HashMap<PageTypes, Page> pageStructure = new HashMap<>();
@@ -75,6 +79,7 @@ public final class Database extends Observable {
 
     public ObjectNode backPage() {
         if (currentUser != null && !pagesStack.empty()) {
+
             return currentPage.setPrevPage(this);
         } else {
             return Utility.response(null, ERROR);
@@ -95,21 +100,20 @@ public final class Database extends Observable {
                           .executeAction(action, this);
     }
 
-    public ObjectNode subscribeUser(ActionInput action) {
-        if (!currentPage.getAvailableActions().containsKey(action.getType())) {
-            return Utility.response(null, ERROR);
-        }
-
-        return currentPage.getAvailableActions().get(action.getType())
-                          .executeAction(action, this);
-    }
-
     public ObjectNode modifyDatabase(ActionInput action) {
         if (!adminActions.containsKey(action.getFeature())) {
             return Utility.response(this, ERROR);
         }
 
         return adminActions.get(action.getFeature()).executeAction(action, this);
+    }
+
+    public ObjectNode getRecommendation() {
+        if (currentUser != null && currentUser.recommendMovie(getAvailableMovies())) {
+            return Utility.response(this, SUGGESTION);
+        }
+
+        return null;
     }
 
     /**
@@ -119,6 +123,18 @@ public final class Database extends Observable {
         for (Map.Entry<PageTypes, Page> page : pageStructure.entrySet()) {
             page.getValue().linkToPages();
         }
+    }
+
+    public List<Movie> getAvailableMovies() {
+        List<Movie> availableMovies = new ArrayList<>();
+
+        moviesDataBase.forEach(movie -> {
+            if (!movie.getCountriesBanned().contains(currentUser.getCreds().getCountry())) {
+                availableMovies.add(movie);
+            }
+        });
+
+        return availableMovies;
     }
 
     /**

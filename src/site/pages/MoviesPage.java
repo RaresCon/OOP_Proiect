@@ -2,11 +2,10 @@ package site.pages;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionInput;
-import site.ResponseCodes;
 import site.Database;
+import site.ResponseCodes;
 import site.Utility;
 import site.actions.UserActions;
-import site.movies.Movie;
 
 public class MoviesPage extends Page {
     /**
@@ -38,6 +37,10 @@ public class MoviesPage extends Page {
     public boolean setNextPage(final ActionInput action, final Database site) {
         if (action.getPage().equals("see details")
             && site.getMovieFromList(site.getCurrentMoviesList(), action.getMovie()) != null) {
+            site.getPagesStack().add(new PageState(pageType,
+                                                   site.getCurrentMoviesList(),
+                                                   site.getCurrentMovie()));
+
             site.setCurrentPage(site.getPageStructure().get(accessiblePages.get(action.getPage())));
             return true;
         } else if (action.getPage().equals("see details")) {
@@ -55,13 +58,7 @@ public class MoviesPage extends Page {
      */
     public ObjectNode setState(final ActionInput action, final Database site) {
         site.getCurrentMoviesList().clear();
-        for (Movie movie : site.getMoviesDataBase()) {
-            if (!movie.getCountriesBanned()
-                      .contains(site.getCurrentUser().getCreds().getCountry())) {
-                site.getCurrentMoviesList().add(movie);
-            }
-        }
-        site.setCurrentMovie(null);
+        site.getCurrentMoviesList().addAll(site.getAvailableMovies());
 
         return Utility.response(site, ResponseCodes.OK);
     }

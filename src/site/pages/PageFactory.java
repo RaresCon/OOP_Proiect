@@ -1,7 +1,5 @@
 package site.pages;
 
-import site.SiteConnection;
-
 public final class PageFactory {
     public static PageFactory instance = null;
 
@@ -35,7 +33,7 @@ public final class PageFactory {
                 return new HomePageNoAuth(PageTypes.HOMEPAGE_NOAUTH);
             }
             case HOMEPAGE_AUTH -> {
-                return new HomePageAuth(PageTypes.HOMEPAGE_NOAUTH);
+                return new HomePageAuth(PageTypes.HOMEPAGE_AUTH);
             }
             case REGISTERPAGE -> {
                 return new RegisterPage(PageTypes.REGISTERPAGE);

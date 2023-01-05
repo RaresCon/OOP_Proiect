@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import site.account.Account;
 import site.account.Credentials;
-import site.notifications.Notification;
 import site.movies.Movie;
+import site.notifications.Notification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +24,23 @@ public final class Utility {
     public static ObjectNode response(final Database site, final ResponseCodes responseCode) {
         ObjectNode response = JsonNodeFactory.instance.objectNode();
 
-        if (responseCode.equals(ResponseCodes.OK)) {
-            response.put("error", (String) null);
-            response.put("currentMoviesList", Utility.movieListOutput(site.getCurrentMoviesList()));
-            response.put("currentUser", Utility.userOutput(site.getCurrentUser()));
-        } else {
-            response.put("error", "Error");
-            response.replace("currentMoviesList", movieListOutput(new ArrayList<>()));
-            response.put("currentUser", (String) null);
+        switch (responseCode) {
+            case OK -> {
+                response.put("error", (String) null);
+                response.put("currentMoviesList",
+                             Utility.movieListOutput(site.getCurrentMoviesList()));
+                response.put("currentUser", Utility.userOutput(site.getCurrentUser()));
+            }
+            case ERROR -> {
+                response.put("error", "Error");
+                response.replace("currentMoviesList", movieListOutput(new ArrayList<>()));
+                response.put("currentUser", (String) null);
+            }
+            case SUGGESTION -> {
+                response.put("error", (String) null);
+                response.put("currentMoviesList", (String) null);
+                response.put("currentUser", Utility.userOutput(site.getCurrentUser()));
+            }
         }
 
         return response;
@@ -66,7 +75,7 @@ public final class Utility {
         movie.getCountriesBanned().forEach(countriesBannedOutput::add);
 
         movieOutput.put("name", movie.getName());
-        movieOutput.put("year", movie.getYear());
+        movieOutput.put("year", Integer.toString(movie.getYear()));
         movieOutput.put("duration", movie.getDuration());
 
         movieOutput.replace("genres", genresOutput);

@@ -42,7 +42,6 @@ public final class SiteConnection {
                 case "change page" -> response = site.changePage(action);
                 case "on page" -> response = site.executeAction(action);
                 case "back" -> response = site.backPage();
-                case "subscribe" -> response = site.subscribeUser(action);
                 case "database" -> response = site.modifyDatabase(action);
                 default -> throw new ExecutionControl.InternalException("Command not recognized");
             }
@@ -50,6 +49,11 @@ public final class SiteConnection {
             if (response != null) {
                 output.add(response);
             }
+        }
+
+        ObjectNode last_response = site.getRecommendation();
+        if (last_response != null) {
+            output.add(last_response);
         }
     }
 }

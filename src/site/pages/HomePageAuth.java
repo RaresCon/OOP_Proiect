@@ -44,6 +44,7 @@ public class HomePageAuth extends Page {
      * @return
      */
     public ObjectNode setPrevPage(Database site) {
+        System.out.println("STIU DE TINE");
         if (super.setPrevPage(site) == null) {
             return Utility.response(null, ERROR);
         }

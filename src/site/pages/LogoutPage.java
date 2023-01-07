@@ -14,14 +14,14 @@ public class LogoutPage extends Page {
     }
 
     /**
-     * function to link this page to other pages
+     * method to link this page to other pages
      */
     public void linkToPages() {
         accessiblePages.put("homepage", PageTypes.HOMEPAGE_NOAUTH);
     }
 
     /**
-     * function to set the state of the current session
+     * method to set the state of the current session
      * @param action action that sets the state
      * @param site the site database
      * @return the output

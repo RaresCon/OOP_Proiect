@@ -20,8 +20,8 @@ public class Movie {
     }
 
     /**
-     * function to get the rating of a movie
-     * @return
+     * method to get the rating of a movie
+     * @return the rating
      */
     public Double getRating() {
         Double overall = ratings.stream().reduce(0.0, Double::sum);
@@ -30,14 +30,14 @@ public class Movie {
     }
 
     /**
-     * function to increment the number of likes
+     * method to increment the number of likes
      */
     public void incNumLikes() {
         numLikes += 1;
     }
 
     /**
-     * function to decrement the number of likes
+     * method to decrement the number of likes
      */
     public void subNumLikes() {
         numLikes -= 1;

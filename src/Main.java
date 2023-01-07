@@ -9,9 +9,17 @@ import java.io.File;
 import java.io.IOException;
 
 public final class Main {
+    /**
+     * default constructor
+     */
     private Main() {
     }
 
+    /**
+     * main method of the connection to the site
+     * @param args file input/output
+     * @throws IOException error if the connection to the site is not established
+     */
     public static void main(final String[] args) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         Input inputData = objectMapper.readValue(new File(args[0]), Input.class);

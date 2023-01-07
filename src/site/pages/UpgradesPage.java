@@ -17,7 +17,7 @@ public class UpgradesPage extends Page {
     }
 
     /**
-     * function to link this page to other pages
+     * method to link this page to other pages
      */
     public void linkToPages() {
         accessiblePages.put("homepage", PageTypes.HOMEPAGE_AUTH);
@@ -26,7 +26,7 @@ public class UpgradesPage extends Page {
     }
 
     /**
-     * function to set the state of the current session
+     * method to set the state of the current session
      * @param input action that sets the state
      * @param site the site database
      * @return the output
@@ -34,6 +34,20 @@ public class UpgradesPage extends Page {
     public ObjectNode setState(final ActionInput input, final Database site) {
         site.getCurrentMoviesList().clear();
         site.setCurrentMovie(null);
+        return null;
+    }
+
+    /**
+     * overload method for setState that uses a PageState as input
+     * @param prevState the state of the previous page
+     * @param site the database
+     * @return the response from the database (null)
+     */
+    public ObjectNode setState(final PageState prevState, final Database site) {
+        site.setCurrentPage(site.getPageStructure().get(prevState.pageType()));
+        site.getCurrentMoviesList().clear();
+        site.setCurrentMovie(prevState.currentMovie());
+
         return null;
     }
 }

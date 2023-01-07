@@ -19,7 +19,7 @@ public class MoviesPage extends Page {
     }
 
     /**
-     * function to link this page to other pages
+     * method to link this page to other pages
      */
     public void linkToPages() {
         accessiblePages.put("homepage", PageTypes.HOMEPAGE_AUTH);
@@ -29,7 +29,7 @@ public class MoviesPage extends Page {
     }
 
     /**
-     * function to set the next page for the current session
+     * method to set the next page for the current session
      * @param action the action that gives the next page
      * @param site the site database
      * @return true if the change was possible, false otherwise
@@ -51,7 +51,7 @@ public class MoviesPage extends Page {
     }
 
     /**
-     * function to set the state of the current session
+     * method to set the state of the current session
      * @param action action that sets the state
      * @param site the site database
      * @return the output
@@ -61,5 +61,15 @@ public class MoviesPage extends Page {
         site.getCurrentMoviesList().addAll(site.getAvailableMovies());
 
         return Utility.response(site, ResponseCodes.OK);
+    }
+
+    /**
+     * overload method for setState that uses a PageState as input
+     * @param prevState the state of the previous page
+     * @param site the database
+     * @return the response from the database
+     */
+    public ObjectNode setState(final PageState prevState, final Database site) {
+        return setState((ActionInput) null, site);
     }
 }

@@ -28,11 +28,12 @@ public final class SiteConnection {
     }
 
     /**
-     * function to process input from the user
+     * method to process input from the user
      * @param input the input given by the user
      * @param output the output for the user
      */
-    public void processInput(final Input input, final ArrayNode output) throws ExecutionControl.InternalException {
+    public void processInput(final Input input, final ArrayNode output)
+           throws ExecutionControl.InternalException {
         Database site = new Database();
         site.loadDataBase(input);
 

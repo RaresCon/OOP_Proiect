@@ -6,7 +6,7 @@ import site.Database;
 
 public interface Action {
     /**
-     * abstract function that implements the effect of each action that a user can execute
+     * abstract method that implements the effect of each action that a user can execute
      * @param action the action info to be checked and applied to the site database
      * @return an ObjectNode representing the response from the database which can be a successful
      * output or an error output

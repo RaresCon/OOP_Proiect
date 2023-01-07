@@ -83,8 +83,10 @@ public final class Database extends Observable {
      */
     public ObjectNode backPage() {
         if (currentUser != null && !pagesStack.empty()) {
+            PageState prevPageState = pagesStack.pop();
 
-            return currentPage.setPrevPage(this);
+            currentPage = pageStructure.get(prevPageState.pageType());
+            return currentPage.setState(prevPageState, this);
         } else {
             return Utility.response(null, ERROR);
         }
@@ -107,7 +109,7 @@ public final class Database extends Observable {
     /**
      * method to check and execute a certain action that affects the database
      * @param action the action giving information about the feature
-     * @return
+     * @return the response from the database
      */
     public ObjectNode modifyDatabase(final ActionInput action) {
         if (!adminActions.containsKey(action.getFeature())) {

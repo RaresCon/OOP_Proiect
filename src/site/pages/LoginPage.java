@@ -16,14 +16,14 @@ public class LoginPage extends Page {
     }
 
     /**
-     * function to link this page to other pages
+     * method to link this page to other pages
      */
     public void linkToPages() {
         accessiblePages.put("homepage auth", PageTypes.HOMEPAGE_AUTH);
     }
 
     /**
-     * function to set the state for the current session
+     * method to set the state for the current session
      * @param input action that sets the state
      * @param site the site database
      * @return the output

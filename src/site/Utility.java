@@ -16,7 +16,7 @@ public final class Utility {
     }
 
     /**
-     * function to return the standard response in case of successful request or error
+     * method to return the standard response in case of successful request or error
      * @param site the current site session
      * @param responseCode the response code given by the function that calls this
      * @return the response

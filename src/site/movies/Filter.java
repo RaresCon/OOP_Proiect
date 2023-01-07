@@ -11,7 +11,7 @@ public final class Filter {
     }
 
     /**
-     * function to sort movies according to some settings
+     * method to sort movies according to some settings
      * @param movies list of movies to be sorted
      * @param sortFilters settings of sorting, containing the way to sort by some parameters
      */
@@ -34,7 +34,7 @@ public final class Filter {
     }
 
     /**
-     * function to filter movies according to some settings
+     * method to filter movies according to some settings
      * @param movies list of movies to be filtered
      * @param filters settings of filtering, containing the actors and genres by which to filter
      */

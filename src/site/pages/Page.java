@@ -24,7 +24,7 @@ public abstract class Page implements PageFunctions {
     }
 
     /**
-     * function to set the next page
+     * method to set the next page
      * @param action the action that gives the next page
      * @param site the site database
      * @return true if the change was possible, false otherwise
@@ -45,23 +45,14 @@ public abstract class Page implements PageFunctions {
     }
 
     /**
-     * method that takes a previous page state and sets it as current
-     * @param site the database on which the state is set
-     * @return outputs different responses according to the page of the page state
+     * overload method for setState that uses a PageState as input
+     * @param prevState the state of the previous page
+     * @param site the database
+     * @return the response from the database
      */
-    public ObjectNode setPrevPage(final Database site) {
-        PageState prevState = site.getPagesStack().pop();
-
+    public ObjectNode setState(final PageState prevState, final Database site) {
         site.setCurrentPage(site.getPageStructure().get(prevState.pageType()));
         site.getCurrentMoviesList().clear();
-        if (prevState.pageType() == PageTypes.MOVIESPAGE) {
-            site.getCurrentPage().setState(null, site);
-        } else if (prevState.pageType() == PageTypes.HOMEPAGE_AUTH
-                   || prevState.pageType() == PageTypes.UPGRADESPAGE) {
-            return null;
-        } else {
-            site.getCurrentMoviesList().addAll(prevState.pageMovies());
-        }
         site.setCurrentMovie(prevState.currentMovie());
 
         return Utility.response(site, OK);

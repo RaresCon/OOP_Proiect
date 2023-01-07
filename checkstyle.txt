@@ -1,12 +1,10 @@
 Starting audit...
-[ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\checker\CheckStyleConstants.java:3:1: Utility classes should not have a public or default constructor. [HideUtilityClassConstructor]
-[ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\Main.java:15:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\site\Database.java:17:17: Using the '.*' form of import should be avoided - java.util.*. [AvoidStarImport]
-[ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\site\SiteConnection.java:35: Line is longer than 100 characters (found 115). [LineLength]
-[ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\site\SiteConnection.java:42:48: Inner assignments should be avoided. [InnerAssignment]
-[ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\site\SiteConnection.java:43:44: Inner assignments should be avoided. [InnerAssignment]
-[ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\site\SiteConnection.java:44:41: Inner assignments should be avoided. [InnerAssignment]
-[ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\site\SiteConnection.java:45:45: Inner assignments should be avoided. [InnerAssignment]
-[ERROR] C:\Users\nitro\IdeaProjects\OOP_Proiect_1\.\src\Test.java:9:28: Using the '.*' form of import should be avoided - java.util.concurrent.*. [AvoidStarImport]
+[ERROR] C:\Users\livco\IdeaProjects\OOP_Proiect_1\.\src\checker\CheckStyleConstants.java:3:1: Utility classes should not have a public or default constructor. [HideUtilityClassConstructor]
+[ERROR] C:\Users\livco\IdeaProjects\OOP_Proiect_1\.\src\site\Database.java:17:17: Using the '.*' form of import should be avoided - java.util.*. [AvoidStarImport]
+[ERROR] C:\Users\livco\IdeaProjects\OOP_Proiect_1\.\src\site\SiteConnection.java:43:48: Inner assignments should be avoided. [InnerAssignment]
+[ERROR] C:\Users\livco\IdeaProjects\OOP_Proiect_1\.\src\site\SiteConnection.java:44:44: Inner assignments should be avoided. [InnerAssignment]
+[ERROR] C:\Users\livco\IdeaProjects\OOP_Proiect_1\.\src\site\SiteConnection.java:45:41: Inner assignments should be avoided. [InnerAssignment]
+[ERROR] C:\Users\livco\IdeaProjects\OOP_Proiect_1\.\src\site\SiteConnection.java:46:45: Inner assignments should be avoided. [InnerAssignment]
+[ERROR] C:\Users\livco\IdeaProjects\OOP_Proiect_1\.\src\Test.java:9:28: Using the '.*' form of import should be avoided - java.util.concurrent.*. [AvoidStarImport]
 Audit done.
-Checkstyle ends with 9 errors.
+Checkstyle ends with 7 errors.

@@ -74,7 +74,7 @@ public enum UserActions implements Action {
     FILTER {
         @Override
         public ObjectNode executeAction(final ActionInput action, final Database site) {
-            site.getCurrentPage().setState(null, site);
+            site.getCurrentPage().setState((ActionInput) null, site);
 
             if (action.getFilters().getSort() != null) {
                 Filter.sortMovies(site.getCurrentMoviesList(),

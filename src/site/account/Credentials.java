@@ -26,7 +26,7 @@ public class Credentials {
     }
 
     /**
-     * function to subtract a certain amount of balance from a user
+     * method to subtract a certain amount of balance from a user
      * @param balanceToSub the amount to subtract from a user
      */
     public void subBalance(final int balanceToSub) {

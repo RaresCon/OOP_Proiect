@@ -26,7 +26,7 @@ public class DetailsPage extends Page {
     }
 
     /**
-     * function to link with other pages of the site architecture,
+     * method to link with other pages of the site architecture,
      * update this if you want to have any other link to any other page
      */
     public void linkToPages() {
@@ -37,7 +37,7 @@ public class DetailsPage extends Page {
     }
 
     /**
-     * function to set the state of the site when arriving at this page
+     * method to set the state of the site when arriving at this page
      * @param action the action that sets the state
      * @param site the site database
      * @return output

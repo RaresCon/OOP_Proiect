@@ -3,9 +3,6 @@ package site.pages;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import input.ActionInput;
 import site.Database;
-import site.Utility;
-
-import static site.ResponseCodes.ERROR;
 
 public class HomePageAuth extends Page {
     /**
@@ -17,7 +14,7 @@ public class HomePageAuth extends Page {
     }
 
     /**
-     * function to link this page to other pages
+     * method to link this page to other pages
      */
     public void linkToPages() {
         accessiblePages.put("movies", PageTypes.MOVIESPAGE);
@@ -26,7 +23,7 @@ public class HomePageAuth extends Page {
     }
 
     /**
-     * function to set the state of the current session
+     * method to set the state of the current session
      * @param input action that sets the state
      * @param site the site database
      * @return the output
@@ -39,14 +36,15 @@ public class HomePageAuth extends Page {
     }
 
     /**
-     * special method override for this specific page
+     * overload method for setState that uses a PageState as input
+     * @param prevState the state of the previous page
      * @param site the database
-     * @return "Error" if the "back" action is not possible, null otherwise
+     * @return the response from the database (null)
      */
-    public ObjectNode setPrevPage(final Database site) {
-        if (super.setPrevPage(site) == null) {
-            return Utility.response(null, ERROR);
-        }
+    public ObjectNode setState(final PageState prevState, final Database site) {
+        site.setCurrentPage(site.getPageStructure().get(prevState.pageType()));
+        site.getCurrentMoviesList().clear();
+        site.setCurrentMovie(prevState.currentMovie());
 
         return null;
     }

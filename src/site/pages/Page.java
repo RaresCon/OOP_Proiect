@@ -45,20 +45,19 @@ public abstract class Page implements PageFunctions {
     }
 
     /**
-     *
-     * @param site
-     * @return
+     * method that takes a previous page state and sets it as current
+     * @param site the database on which the state is set
+     * @return outputs different responses according to the page of the page state
      */
-    public ObjectNode setPrevPage(Database site) {
+    public ObjectNode setPrevPage(final Database site) {
         PageState prevState = site.getPagesStack().pop();
 
         site.setCurrentPage(site.getPageStructure().get(prevState.pageType()));
         site.getCurrentMoviesList().clear();
         if (prevState.pageType() == PageTypes.MOVIESPAGE) {
             site.getCurrentPage().setState(null, site);
-        } else if (prevState.pageType() == PageTypes.HOMEPAGE_AUTH) {
-            return null;
-        } else if (prevState.pageType() == PageTypes.UPGRADESPAGE) {
+        } else if (prevState.pageType() == PageTypes.HOMEPAGE_AUTH
+                   || prevState.pageType() == PageTypes.UPGRADESPAGE) {
             return null;
         } else {
             site.getCurrentMoviesList().addAll(prevState.pageMovies());

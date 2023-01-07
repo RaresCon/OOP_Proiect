@@ -1,4 +1,4 @@
-# Project - POO TV - part 1
+# Project - POO TV
 
 ---
 
@@ -30,11 +30,13 @@ There are two types of commands:
 
 - **On page** - you can execute some actions that are possible on the current page
 
+- **Database** - you can add/delete movies to/from the database of movies
+
 Every possible command and links can be found in Actions enum or following the following link:
 
 ![OCW](https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/proiect/etapa1)
 
-The code is **easier to read**, because every possible action is written inside the Actions enum.
+The code is **easier to read**, because every possible action is written inside the UserActions and AdminActions enums, that implement the Action interface.
 
 ---
 
@@ -64,7 +66,13 @@ I used multiple inheritances, as follows:
   
   - UpgradesPage
 
-The PageFunction interface contains functions that are **crucial for the site** to work properly, so everytime you would like to add a new type of page, you have to implement your own function for linking the pages and the function to set the state of a session. There is a standard implementation for setting the next page in the abstract Page class, but if you want a specific checking before setting the next page, you should override it with your **own implementation**.
+- Observable - class used for the Observer Pattern (notification system)
+  
+  - Database
+
+- Observer - abstract class used for the Observer Pattern (notification system)
+
+The PageFunction interface contains methods that are **crucial for the site** to work properly, so everytime you would like to add a new type of page, you have to implement your own method for linking the pages and the function to set the state of a session. There is a standard implementation for setting the next page in the abstract Page class, but if you want a specific checking before setting the next page, you should override it with your **own implementation**.
 
 #### Design Patterns
 
@@ -73,6 +81,8 @@ The PageFunction interface contains functions that are **crucial for the site** 
 - **Factory pattern** - used for creating the accounts and each page, so the creation part is decoupled from the logic behind every page, each factory throws an exception if the requested type is not implemented
 
 - **Command pattern** - it is actually a watered down version of the Command pattern, because I don't keep track of the actions, but every possible action is stored as a anonymous class in the Actions enum (every action has to implement the abstract function executeAction in Actions enum) and it can be stored in the HashMap of each individual page, so any page can have multiple possible actions that you can set up in that enum
+
+- **Observer pattern** -used for notification system that adds a notification to each user when adding or deleting a movie from the database, if the user is subscribed to one of the genres of the added/deleted movie
 
 I plan to implement also Filter patter for better filtering the movie lists.
 

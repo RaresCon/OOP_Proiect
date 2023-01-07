@@ -1,12 +1,12 @@
 package site.pages;
 
 public final class PageFactory {
-    public static PageFactory instance = null;
+    private static PageFactory instance = null;
 
     /**
      * default private constructor for Singleton
      */
-    private PageFactory(){
+    private PageFactory() {
     }
 
     /**

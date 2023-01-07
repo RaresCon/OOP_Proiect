@@ -17,7 +17,7 @@ import site.pages.PageTypes;
 import java.util.*;
 
 import static site.ResponseCodes.ERROR;
-import static site.ResponseCodes.SUGGESTION;
+import static site.ResponseCodes.RECOMMENDATION;
 
 public final class Database extends Observable {
     private final HashMap<PageTypes, Page> pageStructure = new HashMap<>();
@@ -53,7 +53,7 @@ public final class Database extends Observable {
     }
 
     /**
-     * function to load in the database for the current session
+     * method to load in the database for the current session
      * @param input input from the current session
      */
     public void loadDataBase(final Input input) {
@@ -65,7 +65,7 @@ public final class Database extends Observable {
     }
 
     /**
-     * function to check if a change of page is possible for the current site
+     * method to check if a change of page is possible for the current site
      * @param action the action giving the next page
      * @return outputs "Error" if the change was not possible, "OK" otherwise
      */
@@ -77,6 +77,10 @@ public final class Database extends Observable {
         }
     }
 
+    /**
+     * method to check if a "back" action is possible
+     * @return outputs "Error" if the change was not possible, "OK" or null otherwise
+     */
     public ObjectNode backPage() {
         if (currentUser != null && !pagesStack.empty()) {
 
@@ -87,7 +91,7 @@ public final class Database extends Observable {
     }
 
     /**
-     * function to check and execute a certain feature on the current page
+     * method to check and execute a certain feature on the current page
      * @param action the action giving information about the feature
      * @return outputs "Error" if the change was not possible, "OK" otherwise
      */
@@ -100,7 +104,12 @@ public final class Database extends Observable {
                           .executeAction(action, this);
     }
 
-    public ObjectNode modifyDatabase(ActionInput action) {
+    /**
+     * method to check and execute a certain action that affects the database
+     * @param action the action giving information about the feature
+     * @return
+     */
+    public ObjectNode modifyDatabase(final ActionInput action) {
         if (!adminActions.containsKey(action.getFeature())) {
             return Utility.response(this, ERROR);
         }
@@ -108,9 +117,13 @@ public final class Database extends Observable {
         return adminActions.get(action.getFeature()).executeAction(action, this);
     }
 
+    /**
+     * method that adds a recommendation to the notifications of the current user
+     * @return outputs the format for a recommendation after all actions are completed
+     */
     public ObjectNode getRecommendation() {
         if (currentUser != null && currentUser.recommendMovie(getAvailableMovies())) {
-            return Utility.response(this, SUGGESTION);
+            return Utility.response(this, RECOMMENDATION);
         }
 
         return null;
@@ -125,6 +138,10 @@ public final class Database extends Observable {
         }
     }
 
+    /**
+     * method that returns a list of available movies from the database for the user
+     * @return the list of available movies
+     */
     public List<Movie> getAvailableMovies() {
         List<Movie> availableMovies = new ArrayList<>();
 
@@ -138,7 +155,7 @@ public final class Database extends Observable {
     }
 
     /**
-     * function to return a movie from a list if it is present by a given name
+     * method to return a movie from a list if it is present by a given name
      * @param list the list of movies in which it searches
      * @param name the name of the movie for which it searches
      * @return null if the movie isn't present, the movie object otherwise
@@ -233,6 +250,10 @@ public final class Database extends Observable {
         this.currentMovie = currentMovie;
     }
 
+    /**
+     * getter
+     * @return the stack of page states of the previous pages
+     */
     public Stack<PageState> getPagesStack() {
         return pagesStack;
     }

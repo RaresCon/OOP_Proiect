@@ -39,12 +39,11 @@ public class HomePageAuth extends Page {
     }
 
     /**
-     *
-     * @param site
-     * @return
+     * special method override for this specific page
+     * @param site the database
+     * @return "Error" if the "back" action is not possible, null otherwise
      */
-    public ObjectNode setPrevPage(Database site) {
-        System.out.println("STIU DE TINE");
+    public ObjectNode setPrevPage(final Database site) {
         if (super.setPrevPage(site) == null) {
             return Utility.response(null, ERROR);
         }

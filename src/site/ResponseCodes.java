@@ -2,6 +2,6 @@ package site;
 
 public enum ResponseCodes {
     OK,
-    SUGGESTION,
+    RECOMMENDATION,
     ERROR
 }

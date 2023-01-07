@@ -36,11 +36,12 @@ public final class Utility {
                 response.replace("currentMoviesList", movieListOutput(new ArrayList<>()));
                 response.put("currentUser", (String) null);
             }
-            case SUGGESTION -> {
+            case RECOMMENDATION -> {
                 response.put("error", (String) null);
                 response.put("currentMoviesList", (String) null);
                 response.put("currentUser", Utility.userOutput(site.getCurrentUser()));
             }
+            default -> throw new IllegalArgumentException("Nonexistent ResponseCode");
         }
 
         return response;

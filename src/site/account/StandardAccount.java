@@ -5,7 +5,7 @@ import site.movies.Movie;
 
 import java.util.List;
 
-public class StandardAccount extends Account {
+public final class StandardAccount extends Account {
     /**
      * constructor
      * @param creds the credentials used for the new user
@@ -16,11 +16,12 @@ public class StandardAccount extends Account {
     }
 
     @Override
-    public boolean recommendMovie(List<Movie> availableMovies) {
-        return false;
-    }
-
     public void refundCost() {
         tokensCount += 2;
+    }
+
+    @Override
+    public boolean recommendMovie(final List<Movie> availableMovies) {
+        return false;
     }
 }

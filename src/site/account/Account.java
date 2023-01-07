@@ -28,12 +28,21 @@ public abstract class Account {
         this.creds = new Credentials(creds);
     }
 
+    /**
+     * abstract method that refunds the cost of a user for a deleted movie
+     */
     public abstract void refundCost();
 
+    /**
+     * abstract method that adds a recommendation in the list of notifications
+     * @param availableMovies the list of available movies for the current user
+     * @return true if the current user account can get a recommendation,
+     *         false otherwise
+     */
     public abstract boolean recommendMovie(List<Movie> availableMovies);
 
     /**
-     * function to check if two credentials match, used during login action
+     * method to check if two credentials match, used during login action
      * @param credentials the passed credentials by the user at input
      * @return true if the credentials match, false otherwise
      */
@@ -43,7 +52,7 @@ public abstract class Account {
     }
 
     /**
-     * function to add a certain amount of tokens to the user
+     * method to add a certain amount of tokens to the user
      * @param toAddTokens the amount of tokens to add
      */
     public void addTokens(final int toAddTokens) {
@@ -51,7 +60,7 @@ public abstract class Account {
     }
 
     /**
-     * function to subtract a certain amout of tokens from the user
+     * method to subtract a certain amout of tokens from the user
      * @param toSubTokens the amount of tokens to subtract
      */
     public void subTokens(final int toSubTokens) {
@@ -59,13 +68,18 @@ public abstract class Account {
     }
 
     /**
-     * function to decrement the number of free premium movies after purchasing one movie
+     * method to decrement the number of free premium movies after purchasing one movie
      */
     public void subNumFreePremiumMovies() {
         numFreePremiumMovies -= 1;
     }
 
-    public void addLikedGenres(Movie movie) {
+    /**
+     * method to add a liked genre to the list of a user
+     * if the genre already exists, it increments the number of likes
+     * @param movie liked movie
+     */
+    public void addLikedGenres(final Movie movie) {
         movie.getGenres().forEach(genre -> {
             likedGenres.computeIfAbsent(genre, value -> 0);
             likedGenres.computeIfPresent(genre, (key, value) -> value + 1);
@@ -128,14 +142,34 @@ public abstract class Account {
         return numFreePremiumMovies;
     }
 
+    /**
+     * getter
+     * @return the liked genres hashmap
+     */
+    public HashMap<String, Integer> getLikedGenres() {
+        return likedGenres;
+    }
+
+    /**
+     * getter
+     * @return the ratings hashmap for rated movies
+     */
     public HashMap<String, Integer> getRatings() {
         return ratings;
     }
 
+    /**
+     * getter
+     * @return the list of notifications
+     */
     public List<Notification> getNotifications() {
         return notifications;
     }
 
+    /**
+     * getter
+     * @return the list of genres to which the user is subscribed
+     */
     public List<String> getSubbedGenres() {
         return subbedGenres;
     }

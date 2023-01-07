@@ -4,34 +4,52 @@ import site.Database;
 import site.account.Account;
 import site.movies.Movie;
 
-public class DatabaseObserver extends Observer {
-    public DatabaseObserver(Database site) {
+public final class DatabaseObserver extends Observer {
+    public DatabaseObserver(final Database site) {
         this.site = site;
     }
 
-    @Override
-    public void update(Notification notification) {
-        Movie foundMovie = site.getMovieFromList(site.getMoviesDataBase(), notification.movieName());
+    /**
+     * update method of the Observer class for this implementation
+     * @param notification the notification that will be added to the users
+     *        present in the database at update time
+     */
+    public void update(final Object notification) {
+        Movie foundMovie = site.getMovieFromList(site.getMoviesDataBase(),
+                ((Notification) notification).movieName());
 
-        switch (notification.message()) {
-            case "ADD" -> add_notifications(foundMovie, notification);
-            case "DELETE" -> delete_notifications(foundMovie, notification);
-            default -> System.exit(1);
+        switch (((Notification) notification).message()) {
+            case "ADD" -> appendAddNotifications(foundMovie, (Notification) notification);
+            case "DELETE" -> appendDeleteNotifications(foundMovie, (Notification) notification);
+            default ->
+            throw new IllegalArgumentException("This action for database is not implemented");
         }
     }
 
-    private void add_notifications(Movie foundMovie, Notification notification) {
+    /**
+     * method that appends ADD notifications to all users' notifications lists
+     * @param addedMovie the movie which was added to the database
+     * @param notification the notification that will be appended
+     */
+    private void appendAddNotifications(final Movie addedMovie,
+                                        final Notification notification) {
         for (Account user : site.getUsersDataBase()) {
-            if (!foundMovie.getCountriesBanned().contains(user.getCreds().getCountry())
-                && user.getSubbedGenres().stream().anyMatch(foundMovie.getGenres()::contains)) {
+            if (!addedMovie.getCountriesBanned().contains(user.getCreds().getCountry())
+                && user.getSubbedGenres().stream().anyMatch(addedMovie.getGenres()::contains)) {
                 user.getNotifications().add(notification);
             }
         }
     }
 
-    private void delete_notifications(Movie foundMovie, Notification notification) {
+    /**
+     * method that appends DELETE notifications to all users' notifications lists
+     * @param deletedMovie the movie which was removed from the database
+     * @param notification the notification that will be appended
+     */
+    private void appendDeleteNotifications(final Movie deletedMovie,
+                                           final Notification notification) {
         for (Account user : site.getUsersDataBase()) {
-            if (user.getPurchasedMovies().contains(foundMovie)) {
+            if (user.getPurchasedMovies().contains(deletedMovie)) {
                 user.getNotifications().add(notification);
             }
         }

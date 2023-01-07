@@ -13,7 +13,7 @@ import static site.ResponseCodes.ERROR;
 public enum AdminActions implements Action {
     ADD_MOVIE {
         @Override
-        public ObjectNode executeAction(ActionInput action, Database site) {
+        public ObjectNode executeAction(final ActionInput action, final Database site) {
             if (site.getMoviesDataBase().contains(site.getMovieFromList(site.getMoviesDataBase(),
                                                   action.getAddedMovie().getName()))) {
                 return Utility.response(site, ERROR);
@@ -29,7 +29,7 @@ public enum AdminActions implements Action {
 
     DELETE_MOVIE {
         @Override
-        public ObjectNode executeAction(ActionInput action, Database site) {
+        public ObjectNode executeAction(final ActionInput action, final Database site) {
             Movie foundMovie = site.getMovieFromList(site.getMoviesDataBase(),
                                                      action.getDeletedMovie());
             if (foundMovie == null) {

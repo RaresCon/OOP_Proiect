@@ -198,7 +198,7 @@ public enum UserActions implements Action {
 
     UNLIKE_MOVIE {
         @Override
-        public ObjectNode executeAction(ActionInput action, Database site) {
+        public ObjectNode executeAction(final ActionInput action, final Database site) {
             Account currentUser = site.getCurrentUser();
             List<Movie> userLikedMovies = currentUser.getLikedMovies();
             Movie likedMovie = site.getMovieFromList(userLikedMovies, site.getCurrentMovie());
@@ -206,6 +206,9 @@ public enum UserActions implements Action {
             if (likedMovie != null) {
                 likedMovie.subNumLikes();
                 userLikedMovies.remove(likedMovie);
+
+                likedMovie.getGenres().forEach(genre ->
+                currentUser.getLikedGenres().computeIfPresent(genre, (key, value) -> value - 1));
 
                 return Utility.response(site, OK);
             }
@@ -251,7 +254,7 @@ public enum UserActions implements Action {
 
     SUBSCRIBE {
         @Override
-        public ObjectNode executeAction(ActionInput action, Database site) {
+        public ObjectNode executeAction(final ActionInput action, final Database site) {
             if (site.getCurrentUser().getSubbedGenres().contains(action.getSubscribedGenre())) {
                 return Utility.response(site, ERROR);
             }

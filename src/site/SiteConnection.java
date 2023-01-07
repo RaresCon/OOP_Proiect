@@ -43,7 +43,8 @@ public final class SiteConnection {
                 case "on page" -> response = site.executeAction(action);
                 case "back" -> response = site.backPage();
                 case "database" -> response = site.modifyDatabase(action);
-                default -> throw new ExecutionControl.InternalException("Command not recognized");
+                default ->
+                throw new ExecutionControl.InternalException("Command not recognized");
             }
 
             if (response != null) {
@@ -51,9 +52,9 @@ public final class SiteConnection {
             }
         }
 
-        ObjectNode last_response = site.getRecommendation();
-        if (last_response != null) {
-            output.add(last_response);
+        ObjectNode lastResponse = site.getRecommendation();
+        if (lastResponse != null) {
+            output.add(lastResponse);
         }
     }
 }
